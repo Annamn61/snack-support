@@ -1,0 +1,30 @@
+.header-1, .header-1-w {
+    color: #58886B;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: uppercase;
+    text-align: left;
+    &-w {
+        color: white;
+    }
+}
+
+p {
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+

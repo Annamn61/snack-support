@@ -1,0 +1,78 @@
+.nutrient {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    .name {
+        margin: 0px;
+        width: 100px;
+        text-align: left;
+        font-weight: 600;
+    }
+    .percents {
+        width: 50px;
+    }
+    .bar {
+        background-color: #F5F5F5;
+        flex-grow: 1;
+        width: 40%;
+        height: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        .active {
+            background-color: #38513D;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            border-radius: 20px;
+            // z-index: 2;
+        }
+        .selectedFood {
+            background-color: #779D80;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            border-radius: 20px;
+        }
+    }
+    &.greyed {
+        p {
+            color: #787878;
+            font-weight: 400;
+        }
+        .bar {
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+        }
+        .active {
+            background-color: #999999;
+        }
+        .selectedFood {
+            background-color: #B9B9B9;
+        }
+    }
+    &:hover {
+        cursor: pointer;
+        p {
+            font-weight: 600;
+        }
+        .bar {
+            background-color: #dddddd;
+            .active {
+                background-color: #38513D;
+            }
+            .selectedFood {
+                background-color: #779D80;
+            }
+        }
+        &.greyed {
+            .active {
+                background-color: #bbbbbb;
+            }
+            .selectedFood {
+                background-color: #B9B9B9;
+            }
+        }
+    }
+}

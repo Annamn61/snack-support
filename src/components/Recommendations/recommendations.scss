@@ -1,0 +1,47 @@
+.recommendations{
+    background-color: #58886B;
+    border-radius: 16px;
+    padding: 24px 36px;
+    height: fit-content;
+    .card-row {
+        gap: 24px;
+        width: calc(100% + 80px);
+        overflow-x: scroll;
+        overflow-y: hidden;
+        height: fit-content;
+        padding-left: 40px;
+        margin-left: -40px;
+        margin-right: -40px;
+        padding-bottom: 16px;
+    }
+    .rec-header {
+        justify-content: space-between;
+        color: white;
+        padding-bottom: 20px;
+        .words {
+            gap: 12px;
+        }
+    }
+    .type-buttons {
+        gap: 8px;
+        button {
+            border: none;
+            border-radius: 24px;
+            height: 24px;
+            padding: 0px 8px;    
+            &:hover {
+                cursor: pointer;
+            }  
+            &.selected {
+                background-color: white;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            } 
+            &.unselected {
+                background-color: #84A28F;
+                &:hover {
+                    background-color: #A0C7AE;
+                }
+            }     
+        }
+    }
+}

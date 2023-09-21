@@ -29,6 +29,7 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
 // returns recommended foods (name, image, percent, amount, units) sorted by ranking
 const getRecommendedFoods = (todaysFoodByServing: any[], selectedNutrient: string | undefined, type: string) => {
 
+
     const getNormalizedFood = () => {
         switch (type) {
             case 'calories':
@@ -44,6 +45,10 @@ const getRecommendedFoods = (todaysFoodByServing: any[], selectedNutrient: strin
     const todaysPercents = getTodaysNutrients(todaysFoodByServing);
     const rankings = foodsToUse.map((food) => {
         const score = calculateRecommendedScore(todaysPercents, food.nutrition.nutrients, selectedNutrient);
+
+        console.log('food', food);
+        // TODO: convert food item to grams for the unit, or pass the unit down?
+
         return {
             item: food,
             score: score,

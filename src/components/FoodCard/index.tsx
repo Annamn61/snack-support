@@ -20,7 +20,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
     percent,
     onClick,
 }: FoodCardProps) => {
-    console.log('---', selectedFood, name);
+    // console.log('unit', unit);
     const selectedColor = selectedFood && selectedFood.item.name === name ? 'selectedColor' : 'unselectedColor'
     return (
         <div className={`food-container ${className}`} onClick={onClick}>

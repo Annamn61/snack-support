@@ -1,5 +1,28 @@
 .today {
     background-color: white;
+
+    .addfood {
+        gap: 12px;
+        width: 100%;
+        justify-content: right;
+        transform: .75s width; // TODO: fix
+
+        .input {
+            height: 32px;
+
+            &-text {
+                &:focus {
+                    background-color: green;
+                }
+            }
+        }
+
+        .closed {
+            width: 0%;
+            display: none;
+        }
+    }
+
     .card-row {
         gap: 24px;
         width: 100%;

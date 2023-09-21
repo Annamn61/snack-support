@@ -1,5 +1,4 @@
 import { FoodCard } from '../FoodCard';
-import { AddFood } from './AddFood';
 import './today.scss'
 interface MyDayProps {
     todaysFood: any[];
@@ -13,8 +12,9 @@ export const MyDay: React.FC<MyDayProps> = ({
     const topRecs = ['hi', 'hello', 'wtf is up'];
     return (
         <div className="today">
-            <p className='header-1'>My Day</p>
-            <AddFood selectedFood={todaysFood} />
+            <div className='row'>
+                <p className='header-1'>My Day</p>
+            </div>
             <div className='card-row row'>
                 {todaysFood.map((item) => {
                     return (

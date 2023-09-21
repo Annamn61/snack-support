@@ -4,21 +4,24 @@ interface PercentBarProps {
     setSelectedNutrient: () => void;
     percent: number,
     name: string,
-    percentOfSelectedFood: number,
+    percentOfSelectedFood: number | undefined,
 }
 
 export const PercentBar: React.FC<PercentBarProps> = ({ greyedOut, percent, name, setSelectedNutrient, percentOfSelectedFood }: PercentBarProps) => {
+    const totalPercent = percentOfSelectedFood ? percentOfSelectedFood + percent : percent;
     return (
         <div className={`nutrient ${greyedOut ? 'greyed' : ''}`} onClick={setSelectedNutrient}>
             <p className="name">
                 {name}
             </p>
             <div className="bar">
-                <div className="selectedFood" style={{ width: `${Math.min(percent + percentOfSelectedFood, 100)}%` }} />
+                {percentOfSelectedFood !== undefined && <div className="selectedFood" style={{ width: `${Math.min(percent + percentOfSelectedFood, 100)}%` }} />}
                 <div className="active" style={{ width: `${Math.min(percent, 100)}%` }} />
             </div>
-            <p className="percents">
-                {percent}/{percentOfSelectedFood}
+            <p className="percents row">
+                {percentOfSelectedFood !== undefined && <p className="augment">+&nbsp;{percentOfSelectedFood.toFixed(0)}%</p>}
+                {percentOfSelectedFood != undefined && <p className="delimiter">|</p>}
+                <p className="total">{totalPercent.toFixed(0)}%</p>
             </p>
         </div>
     );

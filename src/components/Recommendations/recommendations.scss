@@ -3,6 +3,7 @@
     border-radius: 16px;
     padding: 24px 36px;
     height: fit-content;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     .card-row {
         gap: 24px;
         width: calc(100% + 80px);
@@ -20,6 +21,15 @@
         padding-bottom: 20px;
         .words {
             gap: 12px;
+        }
+        .display-settings {
+            gap: 8px;
+            align-items: center;
+            .selected-nutrient {
+                background-color: #958CAE;
+                border: 2px solid #CAC3DE;
+                color: #fff;
+            }
         }
     }
 }

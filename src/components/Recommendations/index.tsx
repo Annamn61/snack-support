@@ -3,7 +3,11 @@ import { FoodCard } from '../FoodCard';
 import { useMemo, useState } from 'react';
 import most from '../../assets/Most.svg';
 import least from '../../assets/Least.svg';
+import cancel from '../../assets/Cancel.svg';
 import search from '../../assets/search.svg';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 interface RecommendationProps {
     selectedNutrient: string | undefined;
     selectedFood: any;
@@ -37,10 +41,13 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     }
 
     const [sortOrder, setSortOrder] = useState('Most');
+    const [recType, setRecType] = useState('calorie');
+    const [timePeriod, setTimePeriod] = useState('today');
     const [isSearching, setIsSearching] = useState(false);
+    const [searchText, setSearchText] = useState('');
 
     const displayedFoods = useMemo(() => {
-        const cards = recommendedFoods.map((rec, index) => {
+        const cards = recommendedFoods.filter((food) => food.item.name.includes(searchText)).map((rec, index) => {
             return (<FoodCard
                 key={'foodCard_' + index}
                 className={'recommendations-cards'}
@@ -58,7 +65,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
         }
         console.log('reverse', cards.reverse()[0])
         return cards.slice().reverse();
-    }, [recommendedFoods, selectedFood, sortOrder]);
+    }, [recommendedFoods, selectedFood, sortOrder, searchText]);
 
     return (
         <div className="recommendations">
@@ -66,41 +73,72 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 <div className='words row'>
                     {!isSearching ?
                         (<>
-                            <button className="search-button" onClick={() => setIsSearching(true)}>
+                            <button className="circle-button" onClick={() => setIsSearching(true)}>
                                 <img src={search} />
                             </button>
-                            <p className='header-1-w'>Top Recommendations</p>
+                            <p className='header-1-w row'>Top Recommendations</p>
                         </>)
                         :
-                        (<input type="text" onBlur={() => setIsSearching(false)} >
-                        </input>)
+                        (
+                            <TextField
+                                value={searchText}
+                                InputProps={{
+                                    startAdornment: <img src={search} />,
+                                }}
+                                className="search-bar"
+                                type="text"
+                                onBlur={() => { setIsSearching(false); setSearchText('') }}
+                                id="outlined-basic"
+                                variant="outlined"
+                                placeholder='search'
+                                autoFocus={true}
+                                onChange={(e) => setSearchText(e.target.value)}
+                            />
+                        )
                     }
                 </div>
 
-                <div className='row'>
+                {!isSearching ? (<div className='display-settings row'>
                     For:
-                    <div className='row'>
-                        <button className="selected row" onClick={() => setSortOrder(sortOrder === 'Most' ? 'Least' : 'Most')}>
-                            <p>
+                    {selectedNutrient ?
+                        <>
+                            <button className="selected row" onClick={() => setSortOrder(sortOrder === 'Most' ? 'Least' : 'Most')}>
                                 {sortOrder}
-                            </p>
-                            <img src={sortOrder === 'Most' ? most : least} />
-                        </button>
-                        <p className=''>{selectedNutrient ? `${selectedNutrient} in` : ''} {getType()}</p>
-                    </div>
-                    <button className={`${recommendationType === 'calories' ? 'selected' : 'unselected'}`} onClick={() => setRecommendationType('calories')}>Vitamin</button>
+                                <img src={sortOrder === 'Most' ? most : least} />
+                            </button>
+                            <button className={'selected-nutrient row'} >
+                                <p>{selectedNutrient}</p>
+                                <img src={cancel} />
+                            </button>
+                        </> :
+                        <Select
+                            value={timePeriod}
+                            onChange={(e) => setTimePeriod(e.target.value)}
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value={'today'}>Today</MenuItem>
+                            <MenuItem value={'week'}>This Week</MenuItem>
+                            <MenuItem value={'month'}>This Month</MenuItem>
+                        </Select>
+                    }
                     per
-                    <select onChange={(e) => setRecommendationType(e.target.value)}>
-                        <option value="calories" onSelect={() => setRecommendationType('calories')}>100 calories</option>
-                        <option value="serving" onSelect={() => setRecommendationType('servings')}>serving</option>
-                        <option value="grams" onClick={() => setRecommendationType('grams')}>100 grams</option>
-                    </select>
-                </div>
+                    <Select
+                        value={recommendationType}
+                        onChange={(e) => setRecommendationType(e.target.value)}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        <MenuItem value={'calorie'}>calorie</MenuItem>
+                        <MenuItem value={'serving'}>serving</MenuItem>
+                        <MenuItem value={'gram'}>gram</MenuItem>
+                    </Select>
+                </div>) :
+                    (<p>{displayedFoods.length} results</p>)}
 
             </div>
             <div className='card-row row'>
                 {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()}
-                {sortOrder === "Most" ? 'displayedFoods' : 'displayedFoods.reverse()'}
             </div>
         </div>
     );

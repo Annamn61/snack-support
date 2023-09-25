@@ -18,11 +18,11 @@ export const PercentBar: React.FC<PercentBarProps> = ({ greyedOut, percent, name
                 {percentOfSelectedFood !== undefined && <div className="selectedFood" style={{ width: `${Math.min(percent + percentOfSelectedFood, 100)}%` }} />}
                 <div className="active" style={{ width: `${Math.min(percent, 100)}%` }} />
             </div>
-            <p className="percents row">
+            <div className="percents row">
                 {percentOfSelectedFood !== undefined && <p className="augment">+&nbsp;{percentOfSelectedFood.toFixed(0)}%</p>}
                 {percentOfSelectedFood != undefined && <p className="delimiter">|</p>}
                 <p className="total">{totalPercent.toFixed(0)}%</p>
-            </p>
+            </div>
         </div>
     );
 };

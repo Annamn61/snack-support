@@ -16,9 +16,10 @@ export const MyDay: React.FC<MyDayProps> = ({
                 <p className='header-1'>My Day</p>
             </div>
             <div className='card-row row'>
-                {todaysFood.map((item) => {
+                {todaysFood.map((item, index) => {
                     return (
                         <FoodCard
+                            key={item.id + index}
                             onClick={undefined}
                             percent={undefined}
                             name={item.name}

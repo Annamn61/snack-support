@@ -4,7 +4,7 @@ import { DailyNutrientPercent } from "./Util/types";
 import { pineapple } from "./Util/TestIngredient";
 import { DRIs } from "./Util/DRIs";
 import { today } from "./Util/TestDay";
-import { normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
+import { getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
 
 const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
     let score = 0;
@@ -20,7 +20,6 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
         if (element.amount === 0) singleServingPercent = 0;
         const dailyRemainingPercent = todaysPercents.find(todaysElement => element.name === todaysElement.name)?.percentDV
         score += Math.min(dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, singleServingPercent);
-        // console.log(element.name, dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, '|', singleServingPercent);
     });
     return score;
 }
@@ -29,24 +28,21 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
 // returns recommended foods (name, image, percent, amount, units) sorted by ranking
 const getRecommendedFoods = (todaysFoodByServing: any[], selectedNutrient: string | undefined, type: string) => {
 
-
     const getNormalizedFood = () => {
         switch (type) {
-            case 'calories':
-                return normalizeFoodsByCalories(baseFoods, 100);
-            case 'grams':
-                return normalizeFoodsByGrams(baseFoods, 100);
+            case 'calorie':
+                return normalizeFoodsByCalories(100);
+            case 'gram':
+                return normalizeFoodsByGrams(100);
             default:
                 return baseFoods
         };
     }
-    const foodsToUse = getNormalizedFood();
+    const foodsToUse: any[] = getNormalizedFood();
 
     const todaysPercents = getTodaysNutrients(todaysFoodByServing);
     const rankings = foodsToUse.map((food) => {
         const score = calculateRecommendedScore(todaysPercents, food.nutrition.nutrients, selectedNutrient);
-
-        console.log('food', food);
         // TODO: convert food item to grams for the unit, or pass the unit down?
 
         return {
@@ -62,9 +58,23 @@ const getRecommendedFoods = (todaysFoodByServing: any[], selectedNutrient: strin
 // looks at todays nutrients
 // return [{ name, percentDV, percentOfSelectedFood }]
 const getTodaysNutrients = (todaysFood: any[], selectedFood?: any) => {
-    const todaysSum = pineapple;
+
+    //sum all nutrients from todaysFood.nutrition.nutrients
+    const todaysNutrientSum = JSON.parse(JSON.stringify(todaysFood)).reduce((acc: any[], food: { nutrition: { nutrients: any[]; }; }) => {
+        food.nutrition.nutrients.forEach((nutrient: any) => {
+            const existingNutrient = acc.find((accNutrient: any) => accNutrient.name === nutrient.name);
+            if (existingNutrient) {
+                existingNutrient.amount += nutrient.amount;
+                existingNutrient.percentOfDailyNeeds += nutrient.percentOfDailyNeeds;
+            } else {
+                acc.push(nutrient);
+            }
+        })
+        return acc;
+    }, []);
+
     return DRIs[0].micronutrients.map(element => {
-        const todaysNutrient = todaysSum.nutrition.nutrients.find(nutrient => nutrient.name === element.name);
+        const todaysNutrient = todaysNutrientSum.find((nutrient: { name: string; }) => nutrient.name === element.name);
         let percent = (todaysNutrient ? todaysNutrient.amount / element.amount : 0) * 100
         const selectedFoodNutrients = selectedFood?.item.nutrition.nutrients.find((nutrient: { name: string; }) => nutrient.name === element.name);
         let percentOfSelectedFood = (selectedFoodNutrients ? selectedFoodNutrients.amount / element.amount : 0) * 100
@@ -92,21 +102,26 @@ const sortRankings = (a: {
 }
 
 export function useFoodCalculations() {
-    const [todaysFood, setTodaysFood] = useState(today);
+    const [todaysFood, setTodaysFood] = useState<any[]>([]);
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
+    // const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
     const [selectedFood, setSelectedFood] = useState();
     // const [timeHorizon, setTimeHorizon] = useState(1); // could be 1, 3, 7, 28 days
-    const [recommendationType, setRecommendationType] = useState('servings');
+    const [recommendationType, setRecommendationType] = useState('serving');
     const recommendedFoods = useMemo(() => getRecommendedFoods(todaysFood, selectedNutrient, recommendationType), [todaysFood, selectedNutrient, recommendationType]);
     const todaysNutrients = useMemo(() => getTodaysNutrients(todaysFood, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood]); //may add other sort types ? 
 
     useEffect(() => {
-        console.log('selectedNutrient change', selectedNutrient);
-    }, [selectedNutrient])
+        if (todaysFood.length < 1) return;
+        console.log('TODAYS FOOD change -> calcium -----', todaysFood[0].nutrition.nutrients.find((nutrient: any) => nutrient.name === 'Calcium'));
+        if (todaysFood.length < 2) return;
+        console.log('TODAYS FOOD change -> calcium -----', todaysFood[1].nutrition.nutrients.find((nutrient: any) => nutrient.name === 'Calcium'));
+    }, [todaysFood]);
 
-    const addFoodToToday = (item: any, amount: number, unit: string) => {
-        const newItem = 'hi';
-        // setTodaysFood(todaysFood + newItem)
+    const addFoodToToday = (id: any, amount: number, unit: string) => {
+        const newFood = getNormalizedFood(id, amount, unit);
+        if (newFood === undefined) return;
+        setTodaysFood([newFood, ...todaysFood]);
     }
 
     return {

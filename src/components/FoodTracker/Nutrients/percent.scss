@@ -1,24 +1,44 @@
+@import "../../../Style/constants.scss";
+
+.bar-small {
+    height: 3px;
+    background-color: $lightOrange;
+    border-radius: 4px;
+
+    .active {
+        background-color: $orange;
+        height: 3px;
+        border-radius: 4px;
+    }
+}
+
 .nutrient {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
+
     .name {
         margin: 0px;
         width: 100px;
         text-align: left;
         font-weight: 600;
     }
+
     .percents {
         width: 50px;
         gap: 4px;
+
         .augment {
             color: #779D80;
         }
-        .delimeter, .total {
+
+        .delimeter,
+        .total {
             color: #38513D;
         }
     }
+
     .bar {
         background-color: #F5F5F5;
         width: 180px;
@@ -27,12 +47,19 @@
         overflow: hidden;
         position: relative;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+        div {
+            transition: width .5s;
+            border-radius: 12px;
+        }
+
         .active {
             background-color: #38513D;
             height: 100%;
             position: absolute;
             top: 0;
         }
+
         .selectedFood {
             background-color: #779D80;
             height: 100%;
@@ -40,39 +67,50 @@
             top: 0;
         }
     }
+
     &.greyed {
         p {
             color: #787878;
             font-weight: 400;
         }
+
         .bar {
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
         }
+
         .active {
             background-color: #999999;
         }
+
         .selectedFood {
             background-color: #B9B9B9;
         }
     }
+
     &:hover {
         cursor: pointer;
+
         p {
             font-weight: 600;
         }
+
         .bar {
             background-color: #dddddd;
+
             .active {
                 background-color: #38513D;
             }
+
             .selectedFood {
                 background-color: #779D80;
             }
         }
+
         &.greyed {
             .active {
                 background-color: #bbbbbb;
             }
+
             .selectedFood {
                 background-color: #B9B9B9;
             }

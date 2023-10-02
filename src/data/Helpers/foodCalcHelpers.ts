@@ -1,4 +1,5 @@
 import { baseFoods } from "../BaseFoods/_BaseIndex";
+import { DRIs } from "../Util/DRIs";
 
 export const sortRankings = (a: {
     name: string,
@@ -24,7 +25,8 @@ export const normalizeFoodsByGrams = (grams: number) => {
     })
 }
 
-export const getFoodById = (id: number,  amount: number, unit: string) => {
+export const getFoodById = (id: number | undefined) => {
+    if(!id) return;
     return baseFoods.find(food => food.id === id);
 }
 
@@ -76,4 +78,60 @@ export const getNormalizedFood = (id: number,  amount: number, unit: string) => 
             nutrients: normalizedNutrients,
         }
     }
+}
+
+const percentFromDV = (dri: {amount: number}, nutrient: {amount: number}) => {
+    return (nutrient ? nutrient.amount / dri.amount : 0) * 100;
+}
+
+const getNutrient = (searchName: string, nutrients: any[]) => {
+    return nutrients?.find((nutrient: { name: string; }) => nutrient.name === searchName);
+}
+
+export const getTotalNutrientAmount = (foodList: any[]) => {
+    const todaysNutrientSum = JSON.parse(JSON.stringify(foodList)).reduce((acc: any[], food: { nutrition: { nutrients: any[]; }; }) => {
+        food.nutrition.nutrients.forEach((nutrient: any) => {
+            const existingNutrient = acc.find((accNutrient: any) => accNutrient.name === nutrient.name);
+            if (existingNutrient) {
+                existingNutrient.amount += nutrient.amount;
+            } else {
+                acc.push(nutrient);
+            }
+        })
+        return acc;
+    }, []);
+    return todaysNutrientSum
+}
+
+export const getTotaPercentDVByDay = (foodList: any[], days: number) => {
+    return getTotalPercentDVWithSelectedFood(foodList).map((nutrient: { name: string; percentDV: number; }) => {
+        return {
+            name: nutrient.name,
+            percentDV: nutrient.percentDV / days,
+        }
+    })
+};
+
+export const getTotalPercentDVWithSelectedFood = (todaysFood: any[], selectedFoodAmounts?: { amount: number, unit: string }, selectedFood?: number) => {
+
+    //sum all nutrients from todaysFood.nutrition.nutrients
+    const todaysNutrientSum = getTotalNutrientAmount(todaysFood);
+
+    // normalize selected food to selectedFoodAmounts
+    const normalizedFood: any | undefined = selectedFood && selectedFoodAmounts ? getNormalizedFood(selectedFood, selectedFoodAmounts.amount, selectedFoodAmounts.unit) : undefined;
+
+    return DRIs[0].micronutrients.map((dri: { name: any; amount: number; }) => {
+        const todaysNutrient = getNutrient(dri.name, todaysNutrientSum);
+        let percent = percentFromDV(dri, todaysNutrient);
+        const selectedFoodNutrient = getNutrient(dri.name, normalizedFood?.nutrition.nutrients);
+        let percentOfSelectedFood = percentFromDV(dri, selectedFoodNutrient);
+        if (dri.amount === 0) percent = 0;
+
+        // return object
+        return {
+            name: dri.name,
+            percentDV: +(percent.toFixed(2)),
+            percentOfSelectedFood: percentOfSelectedFood,
+        }
+    });
 }

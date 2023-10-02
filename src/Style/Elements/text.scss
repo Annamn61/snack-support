@@ -1,0 +1,23 @@
+@import "../constants.scss";
+
+h2 {
+    font-family: 'Kiwi Maru', serif;
+    font-weight: 500;
+    color: $green;
+    font-size: 16px;
+    font-style: normal;
+    line-height: normal;
+    text-transform: uppercase;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+p {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    color: $dark;
+    font-size: 14px;
+    &.inverse {
+        color: $white;
+    }
+}

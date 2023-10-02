@@ -1,0 +1,24 @@
+.data {
+    background-color: rgb(175, 210, 198);
+    width: 100vw;
+    min-height: 200vh;
+    display: flex;
+    flex-direction: row;
+    &-sidebar {
+        width: 200px;
+        height: 100vh;
+        position: sticky;
+        top: 0px;
+        border-right: 3px solid rgb(45, 82, 45);
+    }
+    &-content {
+        width: 100%;
+    }
+}
+
+.graph {
+    &-nutrientPercent {
+        height: 500px;
+        width: 100%;
+    }
+}

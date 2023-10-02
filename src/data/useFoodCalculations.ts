@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { baseFoods } from "./BaseFoods/_BaseIndex";
 import { DailyNutrientPercent } from "./Util/types";
-import { pineapple } from "./Util/TestIngredient";
 import { DRIs } from "./Util/DRIs";
-import { today } from "./Util/TestDay";
-import { getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
+import { getTotalPercentDVWithSelectedFood, getFoodById, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
+import { writeUserFood } from "./Util/firebase";
 
 const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
     let score = 0;
@@ -40,7 +39,7 @@ const getRecommendedFoods = (todaysFoodByServing: any[], selectedNutrient: strin
     }
     const foodsToUse: any[] = getNormalizedFood();
 
-    const todaysPercents = getTodaysNutrients(todaysFoodByServing);
+    const todaysPercents = getTotalPercentDVWithSelectedFood(todaysFoodByServing);
     const rankings = foodsToUse.map((food) => {
         const score = calculateRecommendedScore(todaysPercents, food.nutrition.nutrients, selectedNutrient);
         // TODO: convert food item to grams for the unit, or pass the unit down?
@@ -55,37 +54,29 @@ const getRecommendedFoods = (todaysFoodByServing: any[], selectedNutrient: strin
 }
 
 
-// looks at todays nutrients
-// return [{ name, percentDV, percentOfSelectedFood }]
-const getTodaysNutrients = (todaysFood: any[], selectedFood?: any) => {
+// // looks at todays nutrients
+// // return [{ name, percentDV, percentOfSelectedFood }]
+// const getTodaysNutrients = (todaysFood: any[], selectedFoodAmounts?: { amount: number, unit: string }, selectedFood?: number,) => {
 
-    //sum all nutrients from todaysFood.nutrition.nutrients
-    const todaysNutrientSum = JSON.parse(JSON.stringify(todaysFood)).reduce((acc: any[], food: { nutrition: { nutrients: any[]; }; }) => {
-        food.nutrition.nutrients.forEach((nutrient: any) => {
-            const existingNutrient = acc.find((accNutrient: any) => accNutrient.name === nutrient.name);
-            if (existingNutrient) {
-                existingNutrient.amount += nutrient.amount;
-                existingNutrient.percentOfDailyNeeds += nutrient.percentOfDailyNeeds;
-            } else {
-                acc.push(nutrient);
-            }
-        })
-        return acc;
-    }, []);
+//     //sum all nutrients from todaysFood.nutrition.nutrients
+//     const todaysNutrientSum = NutrientSum(todaysFood);
 
-    return DRIs[0].micronutrients.map(element => {
-        const todaysNutrient = todaysNutrientSum.find((nutrient: { name: string; }) => nutrient.name === element.name);
-        let percent = (todaysNutrient ? todaysNutrient.amount / element.amount : 0) * 100
-        const selectedFoodNutrients = selectedFood?.item.nutrition.nutrients.find((nutrient: { name: string; }) => nutrient.name === element.name);
-        let percentOfSelectedFood = (selectedFoodNutrients ? selectedFoodNutrients.amount / element.amount : 0) * 100
-        if (element.amount === 0) percent = 0;
-        return {
-            name: element.name,
-            percentDV: +(percent.toFixed(2)),
-            percentOfSelectedFood: percentOfSelectedFood,
-        }
-    });
-}
+//     // normalize selected food to selectedFoodAmounts
+//     const normalizedFood: any | undefined = selectedFood && selectedFoodAmounts ? getNormalizedFood(selectedFood, selectedFoodAmounts.amount, selectedFoodAmounts.unit) : undefined;
+
+//     return DRIs[0].micronutrients.map(element => {
+//         const todaysNutrient = todaysNutrientSum.find((nutrient: { name: string; }) => nutrient.name === element.name);
+//         let percent = (todaysNutrient ? todaysNutrient.amount / element.amount : 0) * 100
+//         const selectedFoodNutrients = normalizedFood?.nutrition.nutrients.find((nutrient: { name: string; }) => nutrient.name === element.name);
+//         let percentOfSelectedFood = (selectedFoodNutrients ? selectedFoodNutrients.amount / element.amount : 0) * 100
+//         if (element.amount === 0) percent = 0;
+//         return {
+//             name: element.name,
+//             percentDV: +(percent.toFixed(2)),
+//             percentOfSelectedFood: percentOfSelectedFood,
+//         }
+//     });
+// }
 
 const sortPercentDV = (a: { name: string, percentDV: number }, b: { name: string, percentDV: number }) => {
     return a.percentDV - b.percentDV;
@@ -104,33 +95,40 @@ const sortRankings = (a: {
 export function useFoodCalculations() {
     const [todaysFood, setTodaysFood] = useState<any[]>([]);
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
-    // const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
-    const [selectedFood, setSelectedFood] = useState();
+    const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
+    const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{amount: number, unit: string}>({amount: 1, unit: 'serving'});
+    // const [selectedFood, setSelectedFood] = useState();
     // const [timeHorizon, setTimeHorizon] = useState(1); // could be 1, 3, 7, 28 days
     const [recommendationType, setRecommendationType] = useState('serving');
     const recommendedFoods = useMemo(() => getRecommendedFoods(todaysFood, selectedNutrient, recommendationType), [todaysFood, selectedNutrient, recommendationType]);
-    const todaysNutrients = useMemo(() => getTodaysNutrients(todaysFood, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood]); //may add other sort types ? 
+    const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(todaysFood, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
 
     useEffect(() => {
         if (todaysFood.length < 1) return;
-        console.log('TODAYS FOOD change -> calcium -----', todaysFood[0].nutrition.nutrients.find((nutrient: any) => nutrient.name === 'Calcium'));
         if (todaysFood.length < 2) return;
-        console.log('TODAYS FOOD change -> calcium -----', todaysFood[1].nutrition.nutrients.find((nutrient: any) => nutrient.name === 'Calcium'));
     }, [todaysFood]);
 
     const addFoodToToday = (id: any, amount: number, unit: string) => {
+        writeUserFood('anna', id, amount, unit);
         const newFood = getNormalizedFood(id, amount, unit);
         if (newFood === undefined) return;
         setTodaysFood([newFood, ...todaysFood]);
     }
 
+    const removeFoodFromToday = (id: number) => {
+        const newFood = todaysFood.filter(food => food.id !== id);
+        setTodaysFood(newFood);
+    };
+
     return {
         todaysFood,
         addFoodToToday,
+        removeFoodFromToday,
         selectedNutrient,
         setSelectedNutrient,
         selectedFood,
         setSelectedFood,
+        setSelectedFoodAmounts,
         recommendationType,
         setRecommendationType,
         recommendedFoods,

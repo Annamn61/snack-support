@@ -1,16 +1,17 @@
 import './recommendations.scss'
-import { FoodCard } from '../FoodCard';
 import { useMemo, useState } from 'react';
-import most from '../../assets/Most.svg';
-import least from '../../assets/Least.svg';
-import cancel from '../../assets/Cancel.svg';
-import search from '../../assets/search.svg';
+import most from '../../../assets/Most.svg';
+import least from '../../../assets/Least.svg';
+import cancel from '../../../assets/Cancel.svg';
+import search from '../../../assets/search.svg';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { FoodCard } from '../FoodCard';
+import { AddFoodModal } from '../AddFoodModal';
 interface RecommendationProps {
     selectedNutrient: string | undefined;
-    selectedFood: any;
+    selectedFood: number | undefined;
     setSelectedFood: (food: any) => void;
     recommendationType: any;
     setRecommendationType: (food: any) => void;
@@ -26,29 +27,25 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     recommendedFoods,
 }: RecommendationProps) => {
 
-    // delete
-    const getType = () => {
-        switch (recommendationType) {
-            case 'calories':
-                return '100 calories'
-                break;
-            case 'grams':
-                return '100 grams'
-                break;
-            default:
-                return '1 serving'
-        };
-    }
-
     const [sortOrder, setSortOrder] = useState('Most');
     const [recType, setRecType] = useState('calorie');
     const [timePeriod, setTimePeriod] = useState('today');
     const [isSearching, setIsSearching] = useState(false);
     const [searchText, setSearchText] = useState('');
+    const [openModal, setOpenModal] = useState(false);
+
+    const matchesSearch = (food: any) => {
+        if (food.item.name.toLowerCase().includes(searchText.toLowerCase())) {
+            return true;
+        }
+        return food.item.categoryPath.map((category: string) => category.toLowerCase().includes(searchText.toLowerCase())).includes(true);
+    }
 
     const displayedFoods = useMemo(() => {
-        const cards = recommendedFoods.filter((food) => food.item.name.includes(searchText)).map((rec, index) => {
+        const filteredFoods = recommendedFoods.filter((food) => matchesSearch(food))
+        const cards = filteredFoods.map((rec, index) => {
             return (<FoodCard
+                id={rec.item.id}
                 key={'foodCard_' + index}
                 className={'recommendations-cards'}
                 selectedFood={selectedFood}
@@ -57,13 +54,13 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 amount={+(rec.item.amount.toFixed(2))}
                 unit={rec.item.unit}
                 percent={rec.percent && Math.round(rec.percent * 100) / 100}
-                onClick={selectedFood === rec ? () => setSelectedFood(undefined) : () => setSelectedFood(rec)}
+                onClick={selectedFood === rec.item.id ? () => setSelectedFood(undefined) : () => setSelectedFood(rec.item.id)}
+                onAdd={() => setOpenModal(true)}
             />)
         })
         if (sortOrder === "Most") {
             return [...cards];
         }
-        console.log('reverse', cards.reverse()[0])
         return cards.slice().reverse();
     }, [recommendedFoods, selectedFood, sortOrder, searchText]);
 
@@ -73,21 +70,21 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 <div className='words row'>
                     {!isSearching ?
                         (<>
-                            <button className="circle-button" onClick={() => setIsSearching(true)}>
-                                <img src={search} />
+                            <button type="button" className="button-icon" onClick={() => setIsSearching(true)}>
+                                <img src={search} alt="search" />
                             </button>
-                            <p className='header-1-w row'>Top Recommendations</p>
+                            <h2>Top Recommendations</h2>
                         </>)
                         :
                         (
                             <TextField
                                 value={searchText}
                                 InputProps={{
-                                    startAdornment: <img src={search} />,
+                                    startAdornment: <img src={search} alt="search" />,
                                 }}
                                 className="search-bar"
                                 type="text"
-                                onBlur={() => { setIsSearching(false); setSearchText('') }}
+                                // onBlur={() => { setIsSearching(false); setSearchText('') }}
                                 id="outlined-basic"
                                 variant="outlined"
                                 placeholder='search'
@@ -102,13 +99,13 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                     For:
                     {selectedNutrient ?
                         <>
-                            <button className="selected row" onClick={() => setSortOrder(sortOrder === 'Most' ? 'Least' : 'Most')}>
+                            <button type="button" className="button-secondary" onClick={() => setSortOrder(sortOrder === 'Most' ? 'Least' : 'Most')}>
                                 {sortOrder}
-                                <img src={sortOrder === 'Most' ? most : least} />
+                                <img src={sortOrder === 'Most' ? most : least} alt={sortOrder} />
                             </button>
-                            <button className={'selected-nutrient row'} >
+                            <button type="button" className="button-decorative" >
                                 <p>{selectedNutrient}</p>
-                                <img src={cancel} />
+                                <img src={cancel} alt="cancel" />
                             </button>
                         </> :
                         <Select
@@ -138,8 +135,14 @@ export const Recommendations: React.FC<RecommendationProps> = ({
 
             </div>
             <div className='card-row row'>
-                {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()}
+                {displayedFoods.length > 0 ? displayedFoods : <p>No results</p>}
+                {/* {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()} */}
             </div>
+            {openModal && <AddFoodModal
+                food={displayedFoods}
+                deleteFood={() => console.log('delete')}
+                closeModal={() => console.log('close')} />
+            }
         </div>
     );
 };

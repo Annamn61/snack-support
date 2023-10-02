@@ -1,56 +1,39 @@
 import './App.css';
 import './Style/global.scss'
-import { Nutrients } from './components/Nutrients/Nutrients';
 import './Style/app.scss'
+import './Style/constants.scss'
+import './Style/Elements/buttons.scss'
+import './Style/Elements/text.scss'
 import { Header } from './components/Header';
-import { Recommendations } from './components/Recommendations';
 import { useFoodCalculations } from './data/useFoodCalculations';
-import { MyDay } from './components/MyDay';
+import { AppRouter } from "./AppRouter";
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set } from "firebase/database";
+import { firebaseConfig, writeTestData } from "./data/Util/firebase";
+
 
 function App() {
-  const {
-    todaysFood,
-    addFoodToToday,
-    selectedNutrient,
-    setSelectedNutrient,
-    selectedFood,
-    setSelectedFood,
-    recommendationType,
-    setRecommendationType,
-    recommendedFoods,
-    todaysNutrients,
-  } = useFoodCalculations();
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const database = getDatabase(firebaseApp);
+  writeTestData(1, 'test', 'emailTest');
+
+  // calls data and then caches it in local storage
+  // use food calcs should read from the cache
+  // V1: NO CACHING - Just call from firebase again each time
+  const foodData = useFoodCalculations();
+
+
+  // const [foodData, setFoodData] = useState(useFoodCalculations())
+  // const foodData = createContext(FoodContext);
 
   return (
-    <div className="App col">
-      <div className="app-background" />
-      <Header />
-      <div className="content row">
-        <div className="content-left">
-          <Recommendations
-            selectedNutrient={selectedNutrient}
-            selectedFood={selectedFood}
-            setSelectedFood={setSelectedFood}
-            recommendationType={recommendationType}
-            setRecommendationType={setRecommendationType}
-            recommendedFoods={recommendedFoods}
-          />
-          <MyDay
-            todaysFood={todaysFood}
-            addFoodToToday={addFoodToToday}
-          />
-        </div>
-        <div className="content-right col">
-          <Nutrients
-            selectedFood={selectedFood}
-            selectedNutrient={selectedNutrient}
-            setSelectedNutrient={setSelectedNutrient}
-            todaysNutrients={todaysNutrients}
-            addFoodToToday={addFoodToToday}
-          />
-        </div>
-      </div>
-    </div >
+    // <FoodContext.Provider value={foodData}>
+    <div>
+      <Header todaysFood={foodData.todaysFood} />
+      <AppRouter foodData={foodData} />
+    </div>
+    // </ FoodContext.Provider>
   );
 }
 

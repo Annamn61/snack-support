@@ -1,0 +1,49 @@
+@import '../../../Style/constants.scss';
+
+.modal {
+    &-background {
+        position: absolute;
+        background-color: $green;
+        opacity: .8;
+        width: 100vh;
+        height: 100vh;
+        top: 0;
+        left: 0;
+    }
+
+    &-container {
+        position: absolute;
+        max-width: 450px;
+        max-height: 500px;
+        background-color: $white;
+    }
+
+    &-header {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+    }
+
+    &-chips {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    &-add {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        width: 100%;
+    }
+
+    &-footer {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        justify-content: flex-end;
+        width: 100%;
+    }
+}

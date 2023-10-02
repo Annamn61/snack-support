@@ -1,0 +1,81 @@
+.button {
+    &-primary,
+    &-decorative,
+    &-icon,
+    &-secondary,
+    &-accessory {
+        border-radius: 24px;
+        border: 0px;
+        height: 28px;
+        font-size: 16px;
+        vertical-align: center;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        cursor: pointer;
+    }
+
+
+    &-primary,
+    &-decorative,
+    &-secondary {
+        padding: 4px 16px;
+        img {
+            height: 12px;
+            width: 12px;
+        }
+    }
+
+    &-primary {
+        background-color: #84A28F;
+        color: white;
+        &:hover {
+            background-color: #9fb9a9;
+        }
+    }
+
+    &-secondary {
+        background-color: white;
+        color: #000;
+        &:hover {
+            background-color: #caddd1;
+        }
+    }
+
+    &-icon {
+        background-color: white;
+        height: 28px;
+        width: 28px;
+        min-width: 28px;
+
+        img {
+            height: 12px;
+            width: 12px;
+        }
+        &:hover {
+            background-color: #caddd1;
+        }
+    }
+
+    &-accessory {
+        background-color: white;
+        height: 28px;
+        width: 28px;
+        outline: 1px solid black;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+
+    &-decorative {
+        background-color: #958CAE;
+        border: 2px solid #CAC3DE;
+        color: #fff;
+        &:hover {
+            background-color: #aba1c7;
+        }
+    }
+
+}

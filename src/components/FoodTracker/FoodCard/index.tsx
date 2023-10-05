@@ -35,18 +35,19 @@ export const FoodCard: React.FC<FoodCardProps> = ({
     const selectedColor = selectedFood === id ? 'selectedColor' : 'unselectedColor'
     return (
         <div className={`food-container ${className}`} onClick={onClick}>
-            <div className={`foodcard ${selectedFood ? selectedColor : 'defaultColor'}`}>
-                <img className="image" src={`https://spoonacular.com/cdn/ingredients_100x100/${image}`} alt={name} />
-                <p>{name}</p>
-                {/* <p>{amount.toFixed(2)} {unit}(s)</p> */}
-                {percent && <SmallPercentBar percent={percent} />}
-                <div className='row'>
-                    {percent !== undefined ? <p>{percent} %</p> : null}
-                    <button onClick={() => onAdd()}>+</button>
+            <div className={`foodcard col ${selectedFood ? selectedColor : 'defaultColor'}`}>
+                <div className="foodname">
+                    <p>{name}</p>
                 </div>
-                {editing && deleteFood && <button type="button" className="button-accessory" onClick={() => deleteFood(id)} >
+                <img className="image" src={`https://spoonacular.com/cdn/ingredients_100x100/${image}`} alt={name} />
+                {percent && <SmallPercentBar percent={percent} />}
+                <div className="percent">
+                    {percent !== undefined ? <p>{percent} %</p> : null}
+                </div>
+                <button className="foodcard-add" onClick={(e) =>{ onAdd(); e.stopPropagation()}}>+</button>
+                {/* {editing && deleteFood && <button type="button" className="button-accessory" onClick={() => deleteFood(id)} >
                     <img src={cancel} />
-                </button>}
+                </button>} */}
             </div>
         </div>
     );

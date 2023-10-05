@@ -26,7 +26,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                 </button>
             </div>
             <div className='card-row row'>
-                {todaysFood.map((item, index) => {
+                {/* {todaysFood.map((item, index) => {
                     return (
                         item
                         // <FoodCard
@@ -42,7 +42,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                         //     unit={item.unit}
                         // />
                     )
-                })}
+                })} */}
             </div>
         </div>
     );

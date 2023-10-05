@@ -27,7 +27,6 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
 
     return (
         <div className="App col">
-            <div className="app-background" />
             <div className="content row">
                 <div className="content-right col">
                     <Nutrients
@@ -48,6 +47,7 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
                         recommendationType={recommendationType}
                         setRecommendationType={setRecommendationType}
                         recommendedFoods={recommendedFoods}
+                        todaysFood={todaysFood}
                     />
                     <MyDay
                         todaysFood={todaysFood}

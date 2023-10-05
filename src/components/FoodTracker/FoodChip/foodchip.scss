@@ -1,0 +1,38 @@
+@import '../../../Style/constants.scss';
+
+.foodchip {
+    height: 24px;
+    width: calc(100% - 32px);
+    border-radius: 12px;
+    background-color: $neutral;
+    padding: 4px 16px;
+    gap: 16px;
+    align-items: center;
+    &-circle {
+        height: 8px;
+        width: 8px;
+        background-color: $green;
+        border-radius: 12px;
+    }
+    &-title {
+        gap: 4px;
+        flex-grow: 1;
+    }
+    &-delete {
+        button {
+            img {
+                height: 8px;
+                width: 8px;
+            }
+            width: 20px;
+            height: 20px;
+            border: none;
+            background-color: transparent;
+            border-radius: 24px;
+            margin-right: -8px;
+            &:hover {
+                background-color: $white;
+            }
+        }
+    }
+}

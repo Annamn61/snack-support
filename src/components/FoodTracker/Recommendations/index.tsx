@@ -16,6 +16,7 @@ interface RecommendationProps {
     recommendationType: any;
     setRecommendationType: (food: any) => void;
     recommendedFoods: any[];
+    todaysFood: any[];
 }
 
 export const Recommendations: React.FC<RecommendationProps> = ({
@@ -25,6 +26,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     recommendationType,
     setRecommendationType,
     recommendedFoods,
+    todaysFood,
 }: RecommendationProps) => {
 
     const [sortOrder, setSortOrder] = useState('Most');
@@ -139,7 +141,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 {/* {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()} */}
             </div>
             {openModal && <AddFoodModal
-                food={displayedFoods}
+                food={todaysFood}
                 deleteFood={() => console.log('delete')}
                 closeModal={() => console.log('close')} />
             }

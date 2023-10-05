@@ -1,5 +1,7 @@
+@import "../../../Style/constants.scss";
+
 .recommendations{
-    background-color: #58886B;
+    background-color: $pear;
     border-radius: 16px;
     padding: 24px 36px;
     height: fit-content;

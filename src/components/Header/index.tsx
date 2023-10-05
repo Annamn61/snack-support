@@ -1,4 +1,5 @@
 import './header.scss'
+import logo from '../../assets/FF_Logo.svg';
 // interface HeaderProps {
 //     percent: number,
 //     name: string,
@@ -7,14 +8,14 @@ import './header.scss'
 export const Header: React.FC<{todaysFood: any[]}> = ({ todaysFood }) => {
     return (
         <div className="header">
-            hello i am the header
-            {todaysFood.map((food) => {
+            <img src={logo} />
+            {/* {todaysFood.map((food) => {
                 return (
                     <div key={food.id}>
                         {food.name}
                     </div>
                 )
-            })}
+            })} */}
         </div>
     );
 };

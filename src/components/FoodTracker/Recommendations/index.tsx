@@ -35,6 +35,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     const [isSearching, setIsSearching] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [openModal, setOpenModal] = useState(false);
+    const [modalFoodToAdd, setModalFoodToAdd] = useState(undefined);
 
     const matchesSearch = (food: any) => {
         if (food.item.name.toLowerCase().includes(searchText.toLowerCase())) {
@@ -57,7 +58,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 unit={rec.item.unit}
                 percent={rec.percent && Math.round(rec.percent * 100) / 100}
                 onClick={selectedFood === rec.item.id ? () => setSelectedFood(undefined) : () => setSelectedFood(rec.item.id)}
-                onAdd={() => setOpenModal(true)}
+                onAdd={() => {setOpenModal(true); setModalFoodToAdd(rec.item)}}
             />)
         })
         if (sortOrder === "Most") {
@@ -142,8 +143,9 @@ export const Recommendations: React.FC<RecommendationProps> = ({
             </div>
             {openModal && <AddFoodModal
                 food={todaysFood}
+                foodToAdd={modalFoodToAdd}
                 deleteFood={() => console.log('delete')}
-                closeModal={() => console.log('close')} />
+                closeModal={() => setOpenModal(false)} />
             }
         </div>
     );

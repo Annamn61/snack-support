@@ -34,6 +34,10 @@
         gap: 16px;
         align-items: center;
         justify-content: space-between;
+        & .modal-title {
+            gap: 16px;
+            align-items: center;
+        }
     }
 
     &-chips {
@@ -42,6 +46,8 @@
         gap: 12px;
         width: 100%;
         flex-grow: 1;
+        height: 370px; // why no work??
+        overflow-y: scroll;
     }
 
     &-add {

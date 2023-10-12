@@ -48,6 +48,8 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
                         setRecommendationType={setRecommendationType}
                         recommendedFoods={recommendedFoods}
                         todaysFood={todaysFood}
+                        removeFoodFromToday={removeFoodFromToday}
+                        addFoodToToday={addFoodToToday}
                     />
                     <MyDay
                         todaysFood={todaysFood}

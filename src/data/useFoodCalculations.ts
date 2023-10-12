@@ -4,6 +4,7 @@ import { DailyNutrientPercent } from "./Util/types";
 import { DRIs } from "./Util/DRIs";
 import { getTotalPercentDVWithSelectedFood, getFoodById, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
 import { writeUserFood } from "./Util/firebase";
+import { v4 as uuidv4 } from 'uuid';
 
 const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
     let score = 0;
@@ -111,12 +112,14 @@ export function useFoodCalculations() {
     const addFoodToToday = (id: any, amount: number, unit: string) => {
         writeUserFood('anna', id, amount, unit);
         const newFood = getNormalizedFood(id, amount, unit);
+        const addedFoodItem = {...newFood, pk: uuidv4() }
         if (newFood === undefined) return;
-        setTodaysFood([newFood, ...todaysFood]);
+        setTodaysFood([addedFoodItem, ...todaysFood]);
     }
 
-    const removeFoodFromToday = (id: number) => {
-        const newFood = todaysFood.filter(food => food.id !== id);
+    const removeFoodFromToday = (pk: number) => {
+        console.log('removeFoodFromToday', pk);
+        const newFood = todaysFood.filter(food => food.pk !== pk);
         setTodaysFood(newFood);
     };
 

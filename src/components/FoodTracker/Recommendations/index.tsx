@@ -17,6 +17,8 @@ interface RecommendationProps {
     setRecommendationType: (food: any) => void;
     recommendedFoods: any[];
     todaysFood: any[];
+    removeFoodFromToday: (id: number) => void;
+    addFoodToToday: (id: number, amount: number, unit: string) => void;
 }
 
 export const Recommendations: React.FC<RecommendationProps> = ({
@@ -27,6 +29,8 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     setRecommendationType,
     recommendedFoods,
     todaysFood,
+    removeFoodFromToday,
+    addFoodToToday,
 }: RecommendationProps) => {
 
     const [sortOrder, setSortOrder] = useState('Most');
@@ -144,7 +148,8 @@ export const Recommendations: React.FC<RecommendationProps> = ({
             {openModal && <AddFoodModal
                 food={todaysFood}
                 foodToAdd={modalFoodToAdd}
-                deleteFood={() => console.log('delete')}
+                deleteFood={removeFoodFromToday}
+                addFoodToToday={addFoodToToday}
                 closeModal={() => setOpenModal(false)} />
             }
         </div>

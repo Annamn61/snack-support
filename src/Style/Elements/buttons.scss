@@ -2,6 +2,10 @@
 
 button {
     cursor: pointer;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }
 
 .button {
@@ -35,6 +39,7 @@ button {
     }
 
     &-primary {
+        height: 32px;
         background-color: #84A28F;
         color: white;
         &:hover {
@@ -52,9 +57,10 @@ button {
 
     &-icon {
         background-color: white;
-        height: 28px;
+        height: 32px;
         width: 28px;
         min-width: 28px;
+        
 
         img {
             height: 12px;

@@ -18,7 +18,6 @@ export const FoodChip: React.FC<FoodChipProps> = ({
     style,
     onDelete,
 }: FoodChipProps) => {
-    console.log(amount, unit, name, type, style);
     return (
         <div className="foodchip row">
             <div className="foodchip-circle" />

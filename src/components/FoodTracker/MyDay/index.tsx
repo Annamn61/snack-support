@@ -2,6 +2,7 @@ import { FoodCard } from '../FoodCard';
 import pencil from '../../../assets/pencil.svg';
 import './today.scss'
 import { useState } from 'react';
+import { FoodChip } from '../FoodChip/foodchip';
 interface MyDayProps {
     todaysFood: any[];
     addFoodToToday: (item: any, amount: number, unit: string) => void;
@@ -25,24 +26,25 @@ export const MyDay: React.FC<MyDayProps> = ({
                     <img className='icon' src={pencil} alt='edit my day' />
                 </button>
             </div>
-            <div className='card-row row'>
-                {/* {todaysFood.map((item, index) => {
+            <div className='card-row column'>
+                {todaysFood.map((item, index) => {
                     return (
-                        item
-                        // <FoodCard
-                        //     editing={edit}
-                        //     deleteFood={removeFoodFromToday}
-                        //     id={item.id}
-                        //     key={item.id + index}
-                        //     onClick={undefined}
-                        //     percent={undefined}
-                        //     name={item.name}
-                        //     image={item.image}
-                        //     amount={item.amount}
-                        //     unit={item.unit}
-                        // />
+                        <FoodChip
+                            // editing={edit}
+                            onDelete={() => removeFoodFromToday(item.pk)}
+                            // id={item.id}
+                            key={item.id + index}
+                            // onClick={undefined}
+                            // percent={undefined}
+                            name={item.name}
+                            // image={item.image}
+                            amount={item.amount}
+                            unit={item.unit}
+                            type={'asdf'}
+                            style={'asdf'}
+                        />
                     )
-                })} */}
+                })}
             </div>
         </div>
     );

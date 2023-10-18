@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { baseFoods } from "./BaseFoods/_BaseIndex";
 import { DailyNutrientPercent } from "./Util/types";
 import { DRIs } from "./Util/DRIs";
-import { getTotalPercentDVWithSelectedFood, getFoodById, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
+import { getTotalPercentDVWithSelectedFood, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
 import { writeUserFood } from "./Util/firebase";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,7 +19,7 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
         let singleServingPercent = (nutrientInformation ? nutrientInformation.amount / element.amount : 0) * 100
         if (element.amount === 0) singleServingPercent = 0;
         const dailyRemainingPercent = todaysPercents.find(todaysElement => element.name === todaysElement.name)?.percentDV
-        score += Math.min(dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, singleServingPercent);
+        score += selectedNutrient? singleServingPercent : Math.min(dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, singleServingPercent);
     });
     return score;
 }
@@ -93,7 +93,7 @@ const sortRankings = (a: {
     return b.score - a.score
 }
 
-export function useFoodCalculations() {
+export function useFoodCalculations() { 
     const [todaysFood, setTodaysFood] = useState<any[]>([]);
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
     const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
@@ -118,7 +118,6 @@ export function useFoodCalculations() {
     }
 
     const removeFoodFromToday = (pk: number) => {
-        console.log('removeFoodFromToday', pk);
         const newFood = todaysFood.filter(food => food.pk !== pk);
         setTodaysFood(newFood);
     };

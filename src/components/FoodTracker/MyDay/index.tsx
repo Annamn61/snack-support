@@ -26,7 +26,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                     <img className='icon' src={pencil} alt='edit my day' />
                 </button>
             </div>
-            <div className='card-row column'>
+            <div className='chips-col col'>
                 {todaysFood.map((item, index) => {
                     return (
                         <FoodChip
@@ -41,7 +41,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                             amount={item.amount}
                             unit={item.unit}
                             type={'asdf'}
-                            style={'asdf'}
+                            style={'white'}
                         />
                     )
                 })}

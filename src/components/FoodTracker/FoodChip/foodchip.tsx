@@ -6,7 +6,7 @@ interface FoodChipProps {
     unit: string,
     name: string,
     type: string,
-    style: string,
+    style: 'beige' | 'white',
     onDelete: () => void,
 }
 
@@ -18,8 +18,9 @@ export const FoodChip: React.FC<FoodChipProps> = ({
     style,
     onDelete,
 }: FoodChipProps) => {
+    const styleClass = style === 'white' ? 'foodchip-white' : '';
     return (
-        <div className="foodchip row">
+        <div className={`foodchip ${styleClass} row`}>
             <div className="foodchip-circle" />
             <div className="foodchip-title row" >
                 <p>{amount}</p>

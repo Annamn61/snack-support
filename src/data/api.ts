@@ -37,3 +37,27 @@ export const searchFoodItems = async (queryTerm: string) => {
         return null;
     }
 }
+
+export const getIngredient = async (queryTerm: string) => {
+
+    const options = {
+        method: 'GET',
+        url: `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/${queryTerm}/information`,
+        params: {
+            amount: '150',
+            unit: 'grams'
+        },
+        headers: {
+            'X-RapidAPI-Key': '4533082377mshd77b2ed9a1f0af2p1420a5jsnb649f01d95e0', //TODO: pull from env file
+            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com' //TODO: pull from env file
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}

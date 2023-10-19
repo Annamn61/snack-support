@@ -8,15 +8,16 @@ import { Header } from './components/Header';
 import { useFoodCalculations } from './data/useFoodCalculations';
 import { AppRouter } from "./AppRouter";
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set } from "firebase/database";
-import { firebaseConfig, writeTestData } from "./data/Util/firebase";
+// import { getDatabase, ref, set } from "firebase/database";
 
+// import { firebaseConfig } from "./data/Util/firebase";
+// import { getFirestore } from "firebase/firestore";
 
 function App() {
-
-  const firebaseApp = initializeApp(firebaseConfig);
-  const database = getDatabase(firebaseApp);
-  writeTestData(1, 'test', 'emailTest');
+  // const firebaseApp = initializeApp(firebaseConfig);
+  // const db = getFirestore(firebaseApp);
+  
+  // writeTestData(1, 'test', 'emailTest');
 
   // calls data and then caches it in local storage
   // use food calcs should read from the cache

@@ -3,7 +3,7 @@ import { baseFoods } from "./BaseFoods/_BaseIndex";
 import { DailyNutrientPercent } from "./Util/types";
 import { DRIs } from "./Util/DRIs";
 import { getTotalPercentDVWithSelectedFood, getFoodById, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
-import { writeUserFood } from "./Util/firebase";
+import { getUserFoods, writeUserFood } from "./Util/firebase";
 import { v4 as uuidv4 } from 'uuid';
 
 const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
@@ -94,6 +94,8 @@ const sortRankings = (a: {
 }
 
 export function useFoodCalculations() {
+    // TODO: get todays food from firebase
+    getUserFoods('anna', 'week');
     const [todaysFood, setTodaysFood] = useState<any[]>([]);
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
     const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
@@ -109,10 +111,11 @@ export function useFoodCalculations() {
         if (todaysFood.length < 2) return;
     }, [todaysFood]);
 
-    const addFoodToToday = (id: any, amount: number, unit: string) => {
-        writeUserFood('anna', id, amount, unit);
+    const addFoodToToday = async (id: any, amount: number, unit: string) => {
+        // const uuid = uuidv4();
+        const uuid = await writeUserFood('anna', id, amount, unit);
         const newFood = getNormalizedFood(id, amount, unit);
-        const addedFoodItem = {...newFood, pk: uuidv4() }
+        const addedFoodItem = {...newFood, pk: uuid}
         if (newFood === undefined) return;
         setTodaysFood([addedFoodItem, ...todaysFood]);
     }

@@ -45,6 +45,12 @@ export const Recommendations: React.FC<RecommendationProps> = ({
         if (food.item.name.toLowerCase().includes(searchText.toLowerCase())) {
             return true;
         }
+        if (food.item.aisle.toLowerCase().includes(searchText.toLowerCase())) {
+          return true;
+        }
+        if (food.item.image.toLowerCase().includes(searchText.toLowerCase())) {
+          return true;
+        }
         return food.item.categoryPath.map((category: string) => category.toLowerCase().includes(searchText.toLowerCase())).includes(true);
     }
 
@@ -60,7 +66,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 image={rec.item.image}
                 amount={+(rec.item.amount.toFixed(2))}
                 unit={rec.item.unit}
-                percent={rec.percent && Math.round(rec.percent * 100) / 100}
+                percent={(selectedNutrient !== undefined) && Math.round(rec.percent * 100) / 100}
                 onClick={selectedFood === rec.item.id ? () => setSelectedFood(undefined) : () => setSelectedFood(rec.item.id)}
                 onAdd={() => {setOpenModal(true); setModalFoodToAdd(rec.item)}}
             />)

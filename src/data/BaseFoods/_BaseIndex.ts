@@ -68,6 +68,38 @@ import { walnut } from "./Walnut";
 import { water_chestnuts_canned } from "./WaterChestnuts-Canned";
 import { watermelon_raddish } from "./WatermelonRadish";
 import { yam } from "./Yam";
+import { acai_juice } from "./AcaiJuice";
+import { apple_juice } from "./AppleJuice";
+import { applewood_smoked_bacon } from "./ApplewoodSmokedBacon";
+import { apricot_jam } from "./ApricotJam";
+import { apricots } from "./Apricots";
+import { baby_arugula_leaves } from "./BabyArugulaLeaves";
+import { banana_chips } from "./BananaChips";
+import { bael } from "./Bael";
+import { brown_rice } from "./BrownRice";
+import { black_pepper } from "./BlackPepper";
+import { beef } from "./Beef";
+import { blackberry_juice } from "./BlackberryJuice";
+import { black_sesame_seeds } from "./BlackSesameSeeds";
+import { blood_orange_juice } from './BloodOrangeJuice';
+import { blueberry_juice } from './BlueberryJuice';
+import { lean_ground_turkey } from './93%LeanGroundTurkey';
+import { boneless_turkey_breasts } from './BonelessTurkeyBreasts';
+import { butter_beans } from './ButterBeans';
+import { butterhead_lettuce } from './ButterheadLettuce';
+import { butter_milk } from './ButterMilk';
+import { canned_butter_beans } from './CannedButterBeans';
+import { canned_jack_fruit } from './CannedJackFruit';
+import { capsicum } from './Capsicum';
+import { cauliflower } from './Cauliflower';
+import { celery } from './Celery';
+import { chard } from './Chard';
+import { chardonnay } from './Chardonnay';
+import { cherry_juice } from './CherryJuice';
+import { chinese_celery_cabbage } from './ChineseCeleryCabbage';
+import { clementine_juice } from './ClementineJuice';
+import { coconut_cooking_oil } from './CoconutCookingOil';
+import { collards } from './Collards';
 
 export const baseFoods = [
     banana,
@@ -140,4 +172,36 @@ export const baseFoods = [
     rapeseed_oil,
     vegetable_stock,
     carrot_juice, // 70
+    acai_juice,
+    apple_juice,
+    applewood_smoked_bacon,
+    apricot_jam,
+    apricots,
+    baby_arugula_leaves,
+    banana_chips,
+    bael,
+    brown_rice,
+    black_pepper, //80
+    beef,
+    blackberry_juice,
+    black_sesame_seeds,
+    blood_orange_juice,
+    blueberry_juice,
+    lean_ground_turkey,
+    boneless_turkey_breasts,
+    butter_beans,
+    butterhead_lettuce,
+    butter_milk, // 90
+    canned_butter_beans,
+    canned_jack_fruit,
+    capsicum,
+    cauliflower,
+    celery,
+    chard,
+    chardonnay,
+    cherry_juice,
+    chinese_celery_cabbage,
+    clementine_juice, // 100 !!
+    coconut_cooking_oil,
+    collards,
 ]

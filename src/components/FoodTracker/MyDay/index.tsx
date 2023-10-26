@@ -4,7 +4,7 @@ import './today.scss'
 import { useState } from 'react';
 import { FoodChip } from '../FoodChip/foodchip';
 interface MyDayProps {
-    todaysFood: any[];
+    todaysFood?: any[];
     addFoodToToday: (item: any, amount: number, unit: string) => void;
     removeFoodFromToday: (id: number) => void;
 }
@@ -27,7 +27,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                 </button>
             </div>
             <div className='chips-col col'>
-                {todaysFood.map((item, index) => {
+                {todaysFood && todaysFood.map((item, index) => {
                     return (
                         <FoodChip
                             // editing={edit}

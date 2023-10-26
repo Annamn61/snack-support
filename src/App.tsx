@@ -31,7 +31,7 @@ function App() {
   return (
     // <FoodContext.Provider value={foodData}>
     <div>
-      <Header todaysFood={foodData.todaysFood} />
+      <Header />
       <AppRouter foodData={foodData} />
     </div>
     // </ FoodContext.Provider>

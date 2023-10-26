@@ -19,7 +19,7 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
         let singleServingPercent = (nutrientInformation ? nutrientInformation.amount / element.amount : 0) * 100
         if (element.amount === 0) singleServingPercent = 0;
         const dailyRemainingPercent = todaysPercents.find(todaysElement => element.name === todaysElement.name)?.percentDV
-        score += selectedNutrient? singleServingPercent : Math.min(dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, singleServingPercent);
+        score += selectedNutrient ? singleServingPercent : Math.min(dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, singleServingPercent);
     });
     return score;
 }
@@ -95,11 +95,10 @@ const sortRankings = (a: {
 
 export function useFoodCalculations() {
     // TODO: get todays food from firebase
-    getUserFoods('anna', 'week');
     const [todaysFood, setTodaysFood] = useState<any[]>([]);
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
     const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
-    const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{amount: number, unit: string}>({amount: 1, unit: 'serving'});
+    const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{ amount: number, unit: string }>({ amount: 1, unit: 'serving' });
     // const [selectedFood, setSelectedFood] = useState();
     // const [timeHorizon, setTimeHorizon] = useState(1); // could be 1, 3, 7, 28 days
     const [recommendationType, setRecommendationType] = useState('serving');
@@ -107,17 +106,31 @@ export function useFoodCalculations() {
     const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(todaysFood, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
 
     useEffect(() => {
+        getUserFoods('anna', 'week').then(result => {
+            const res = result as { id: any, amount: number, unit: string, pk: string }[]
+            console.log('REST', res);
+            setTodaysFoodsRemote(res);
+        });
+    }, []);
+
+    useEffect(() => {
         if (todaysFood.length < 1) return;
         if (todaysFood.length < 2) return;
     }, [todaysFood]);
 
     const addFoodToToday = async (id: any, amount: number, unit: string) => {
-        // const uuid = uuidv4();
         const uuid = await writeUserFood('anna', id, amount, unit);
         const newFood = getNormalizedFood(id, amount, unit);
-        const addedFoodItem = {...newFood, pk: uuid}
+        const addedFoodItem = { ...newFood, pk: uuid }
         if (newFood === undefined) return;
         setTodaysFood([addedFoodItem, ...todaysFood]);
+    }
+
+    const setTodaysFoodsRemote = async (foods: { id: any, amount: number, unit: string, pk: string }[]) => {
+        const foodsToSet = foods.map(food => {
+            return { ...getNormalizedFood(food.id, food.amount, food.unit), pk: food.pk }
+        })
+        setTodaysFood(foodsToSet);
     }
 
     const removeFoodFromToday = (pk: number) => {

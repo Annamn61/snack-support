@@ -23,7 +23,7 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
         todaysNutrients,
     } = foodData;
 
-    console.log(todaysFood);
+    console.log('today', todaysFood);
 
     return (
         <div className="App col">

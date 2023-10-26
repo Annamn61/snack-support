@@ -6,7 +6,7 @@ import { MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react';
 
 interface AddFoodModalProps {
-    food: any[],
+    food?: any[],
     foodToAdd: any,
     deleteFood: (pk: number) => void,
     addFoodToToday: (id: number, amount: number, unit: string) => void,
@@ -38,7 +38,7 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                     <button onClick={() => closeModal()}>X</button>
                 </div>
                 <div className="modal-chips">
-                    {food.map((item) => <FoodChip
+                    {food && food.map((item) => <FoodChip
                         key={item.pk}
                         unit={item.unit}
                         name={item.name}

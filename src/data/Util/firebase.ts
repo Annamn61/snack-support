@@ -32,16 +32,25 @@ export async function writeUserFood(name: string, id: number, amount: number, un
 
 export async function getUserFoods(name: string, from: string) {
     const subtract = from === 'week' ? 7 : 1;
-    let queryFrom = new Date().getDate() - subtract;
+    let queryFrom = new Date();
+    queryFrom.setDate(queryFrom.getDate() - subtract);
 
     const usersRef = collection(db, "users");
-    const currentUser = query(collection(db, "users", "anna", "foods"), where("id", "==", 11445));
+    // const currentUser = query(collection(db, "users", "anna", "foods"));
+    console.log(queryFrom);
+    const currentUser = query(collection(db, "users", "anna", "foods"), where("addedDate", ">=", Number(queryFrom)));
 
     const querySnapshot = await getDocs(currentUser);
+    let foodsList: { pk: string; }[] = [];
     querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
+        foodsList.push({
+          ...doc.data(),
+          pk: doc.id
+        })
       });
+    return foodsList;
 
     // const dbRef = ref(getDatabase()).orderBy('addedDate');
 

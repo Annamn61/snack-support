@@ -16,7 +16,7 @@ interface RecommendationProps {
     recommendationType: any;
     setRecommendationType: (food: any) => void;
     recommendedFoods: any[];
-    todaysFood: any[];
+    todaysFood?: any[];
     removeFoodFromToday: (id: number) => void;
     addFoodToToday: (id: number, amount: number, unit: string) => void;
 }

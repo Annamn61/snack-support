@@ -4,7 +4,7 @@
 import requests
 import json
 import os
-
+import time
 
 def getBaseFoods(foodsToGet):
     #for each food in foodsToGet make an api call
@@ -21,13 +21,21 @@ def getBaseFoods(foodsToGet):
         }
         response = requests.request("GET", url, headers=headers, params=params)
         # save the data to a text file
-        name = response.json().get('originalName').title().replace(' ', '')
-        name_ = response.json().get('originalName').replace(' ', '_')
-        print(name)
-        with open('Foods/' + name + '.ts', 'a') as outfile:
-            outfile.write('export const ' + name_ + ' = ')
-            json.dump(response.json(), outfile)
-            outfile.write("\n")
+        if (response.json().get('originalName')): 
+            name = response.json().get('originalName').title().replace(' ', '')
+            name_ = response.json().get('originalName').replace(' ', '_')
+            print(name)
+            with open('Foods/' + name + '.ts', 'a') as outfile:
+                outfile.write('export const ' + name_ + ' = ')
+                json.dump(response.json(), outfile)
+                outfile.write("\n")
+        else: 
+            print('error!!!!', food, response.json())
+        time.sleep(3)
+
+
+# for next time
+# 93730, 18033, 18044, 99156, 98871, 18971, 98895, 18029, 18060, 18027, 10118029, 18413, 18439, 93837
 
 
 if __name__ == "__main__":

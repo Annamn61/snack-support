@@ -100,6 +100,17 @@ import { chinese_celery_cabbage } from './ChineseCeleryCabbage';
 import { clementine_juice } from './ClementineJuice';
 import { coconut_cooking_oil } from './CoconutCookingOil';
 import { collards } from './Collards';
+import { _1milk } from './1%Milk';
+import { _2milk } from './2%Milk';
+import { almond_drink } from './AlmondDrink';
+import { baby_potatoes } from './BabyPotatoes';
+import { cashew_nut_milk } from './CashewNutMilk';
+import { ciabatta_bread } from './CiabattaBread';
+import { clotted_cream } from './ClottedCream';
+import { courgette } from './Courgette';
+import { craisin } from './Craisin';
+import { cranberry_juice } from './CranberryJuice';
+import { cream } from './Cream';
 
 export const baseFoods = [
     banana,
@@ -204,4 +215,15 @@ export const baseFoods = [
     clementine_juice, // 100 !!
     coconut_cooking_oil,
     collards,
+    _1milk,
+    _2milk,
+    almond_drink,
+    baby_potatoes,
+    cashew_nut_milk,
+    ciabatta_bread,
+    clotted_cream,
+    courgette, // 110
+    craisin,
+    cranberry_juice,
+    cream
 ]

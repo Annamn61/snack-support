@@ -30,10 +30,9 @@ export async function writeUserFood(name: string, id: number, amount: number, un
     return (result as any)._key.path.segments[3];
 }
 
-export async function getUserFoods(name: string, from: string) {
-    const subtract = from === 'week' ? 7 : 1;
+export async function getUserFoods(name: string, from: number) {
     let queryFrom = new Date();
-    queryFrom.setDate(queryFrom.getDate() - subtract);
+    queryFrom.setDate(queryFrom.getDate() - from);
 
     const usersRef = collection(db, "users");
     // const currentUser = query(collection(db, "users", "anna", "foods"));

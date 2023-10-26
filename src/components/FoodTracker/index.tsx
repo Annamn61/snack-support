@@ -21,6 +21,8 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
         setRecommendationType,
         recommendedFoods,
         todaysNutrients,
+        timeHorizon,
+        setTimeHorizon
     } = foodData;
 
     console.log('today', todaysFood);
@@ -55,6 +57,8 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
                         todaysFood={todaysFood}
                         addFoodToToday={addFoodToToday}
                         removeFoodFromToday={removeFoodFromToday}
+                        timeHorizon={timeHorizon}
+                        setTimeHorizon={setTimeHorizon}
                     />
                 </div>
             </div>

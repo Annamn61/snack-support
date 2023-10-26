@@ -37,5 +37,8 @@
     }
     &-white {
         background-color: $white;
+        .foodchip-delete button:hover {
+            background-color: $lightBlue;
+        }
     }
 }

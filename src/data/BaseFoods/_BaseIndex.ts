@@ -111,6 +111,26 @@ import { courgette } from './Courgette';
 import { craisin } from './Craisin';
 import { cranberry_juice } from './CranberryJuice';
 import { cream } from './Cream';
+import { cream_of_tartar } from './CreamOfTartar';
+import { crunchy_peanut_butter } from './CrunchyPeanutButter';
+import { cucumbers } from './Cucumbers';
+import { date } from './Date';
+import { deer } from './Deer';
+import { dragonfruit } from './Dragonfruit';
+import { dried_apples } from './DriedApples';
+import { dried_apricot } from './DriedApricot';
+import { dried_blueberries } from './DriedBlueberries';
+import { dried_cranberries } from './DriedCranberries';
+import { dried_currants } from './DriedCurrants';
+import { dried_diced_mango } from './DriedDicedMango';
+import { dried_figs } from './DriedFigs';
+import { dried_peaches } from './DriedPeaches';
+import { dried_pears } from './DriedPears';
+import { dried_pineapple } from './DriedPineapple';
+import { dried_raisins } from './DriedRaisins';
+import { dried_sage } from './DriedSage';
+import { dried_strawberries } from './DriedStrawberries';
+import { dried_sweet_cherries } from './DriedSweetCherries';
 
 export const baseFoods = [
     banana,
@@ -225,5 +245,25 @@ export const baseFoods = [
     courgette, // 110
     craisin,
     cranberry_juice,
-    cream
+    cream,
+    cream_of_tartar,
+    crunchy_peanut_butter,
+    cucumbers,
+    date,
+    deer,
+    dragonfruit,
+    dried_apples, // 120
+    dried_apricot,
+    dried_blueberries,
+    dried_cranberries,
+    dried_currants,
+    dried_diced_mango,
+    dried_figs,
+    dried_peaches,
+    dried_pears,
+    dried_pineapple,
+    dried_raisins, // 130
+    dried_sage,
+    dried_strawberries,
+    dried_sweet_cherries,
 ]

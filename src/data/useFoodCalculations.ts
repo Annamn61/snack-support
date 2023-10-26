@@ -96,6 +96,7 @@ const sortRankings = (a: {
 export function useFoodCalculations() {
     // TODO: get todays food from firebase
     const [todaysFood, setTodaysFood] = useState<any[]>([]);
+    const [timeHorizon, setTimeHorizon] = useState<number>(30);
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
     const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
     const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{ amount: number, unit: string }>({ amount: 1, unit: 'serving' });
@@ -106,12 +107,12 @@ export function useFoodCalculations() {
     const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(todaysFood, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
 
     useEffect(() => {
-        getUserFoods('anna', 'week').then(result => {
+        getUserFoods('anna', timeHorizon).then(result => {
             const res = result as { id: any, amount: number, unit: string, pk: string }[]
             console.log('REST', res);
             setTodaysFoodsRemote(res);
         });
-    }, []);
+    }, [timeHorizon]);
 
     useEffect(() => {
         if (todaysFood.length < 1) return;
@@ -151,5 +152,7 @@ export function useFoodCalculations() {
         setRecommendationType,
         recommendedFoods,
         todaysNutrients,
+        timeHorizon,
+        setTimeHorizon,
     }
 }

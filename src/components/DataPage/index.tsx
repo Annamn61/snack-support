@@ -8,7 +8,7 @@ interface DataPageProps {
 
 export const DataPage: React.FC<DataPageProps> = ({ foodData }) => {
 
-    const { addFoodToToday, todaysFood } = foodData;
+    const { addFoodToToday, timeHorizonFoods } = foodData;
 
     useEffect(() => {
         addFoodToToday(11090, 1, 'serving');
@@ -20,7 +20,7 @@ export const DataPage: React.FC<DataPageProps> = ({ foodData }) => {
                 hi
             </div>
             <div className="data-content">
-                <NutrientPercent food={foodData.todaysFood} />
+                <NutrientPercent food={foodData.timeHorizonFoods} />
             </div>
         </div>
     );

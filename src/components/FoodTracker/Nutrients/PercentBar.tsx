@@ -1,16 +1,16 @@
 import './percent.scss'
 interface PercentBarProps {
-    greyedOut: boolean,
+    status: string,
     setSelectedNutrient: () => void;
     percent: number,
     name: string,
     percentOfSelectedFood: number | undefined,
 }
 
-export const PercentBar: React.FC<PercentBarProps> = ({ greyedOut, percent, name, setSelectedNutrient, percentOfSelectedFood }: PercentBarProps) => {
+export const PercentBar: React.FC<PercentBarProps> = ({ status, percent, name, setSelectedNutrient, percentOfSelectedFood }: PercentBarProps) => {
     const totalPercent = percentOfSelectedFood ? percentOfSelectedFood + percent : percent;
     return (
-        <div className={`nutrient ${greyedOut ? 'greyed' : ''}`} onClick={setSelectedNutrient}>
+        <div className={`nutrient ${status}`} onClick={setSelectedNutrient}>
             <p className="name">
                 {name}
             </p>

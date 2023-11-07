@@ -112,10 +112,10 @@ export const getTotaPercentDVByDay = (foodList: any[], days: number) => {
     })
 };
 
-export const getTotalPercentDVWithSelectedFood = (todaysFood: any[], selectedFoodAmounts?: { amount: number, unit: string }, selectedFood?: number) => {
+export const getTotalPercentDVWithSelectedFood = (timeHorizonFoods: any[], selectedFoodAmounts?: { amount: number, unit: string }, selectedFood?: number) => {
 
     //sum all nutrients from todaysFood.nutrition.nutrients
-    const todaysNutrientSum = getTotalNutrientAmount(todaysFood);
+    const todaysNutrientSum = getTotalNutrientAmount(timeHorizonFoods);
 
     // normalize selected food to selectedFoodAmounts
     const normalizedFood: any | undefined = selectedFood && selectedFoodAmounts ? getNormalizedFood(selectedFood, selectedFoodAmounts.amount, selectedFoodAmounts.unit) : undefined;

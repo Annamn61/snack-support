@@ -33,7 +33,6 @@ import { honey } from "./Honey";
 import { honey_dew_melon } from "./HoneyDewMelon";
 import { jicama } from "./Jicama";
 import { kelp } from "./Kelp";
-import { lobster } from "./Lobster";
 import { lychee } from "./Lychee";
 import { macademia_nuts } from "./MacademiaNuts";
 import { onion } from "./Onion";
@@ -148,7 +147,6 @@ import { grape_juice } from './GrapeJuice';
 import { green_bell_pepper } from './GreenBellPepper';
 import { challah_bread } from './ChallahBread';
 import { english_muffins } from './EnglishMuffins';
-
 import { lobster_meat } from './LobsterMeat';
 import { lite_coconut_milk } from './LiteCoconutMilk';
 import { kiwifruit } from './Kiwifruit';
@@ -169,7 +167,6 @@ import { ground_paprika } from './GroundPaprika';
 import { guava_juice } from './GuavaJuice';
 import { half_n_half } from './HalfNHalf';
 import { hawaiian_bun } from './HawaiianBun';
-
 import { longan_fruit } from './LonganFruit';
 import { Luo_Han_Guo } from './LuoHanGuo';
 import { medjool_dates } from './MedjoolDates';
@@ -213,7 +210,7 @@ export const baseFoods = [
     lychee,
     chestnut, //20
     cashew,
-    lobster,
+    pineapple_juice,
     crab,
     cottage_cheese,
     cream_cheese,
@@ -381,5 +378,5 @@ export const baseFoods = [
     pepper_jack_cheese,
     peppers,
     persimmons,
-    pineapple_juice // 190
+     // 190
 ]

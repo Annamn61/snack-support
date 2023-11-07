@@ -1,12 +1,10 @@
-import { FoodCard } from '../FoodCard';
-import pencil from '../../../assets/pencil.svg';
 import './today.scss'
 import { useState } from 'react';
 import { FoodChip } from '../FoodChip/foodchip';
 import { MenuItem, Select } from '@mui/material';
 import { Calendar } from './Calendar';
 interface MyDayProps {
-    todaysFood?: any[];
+    timeHorizonFoods?: any[];
     addFoodToToday: (item: any, amount: number, unit: string) => void;
     removeFoodFromToday: (id: number) => void;
     timeHorizon: number;
@@ -14,14 +12,13 @@ interface MyDayProps {
 }
 
 export const MyDay: React.FC<MyDayProps> = ({
-    todaysFood,
+    timeHorizonFoods,
     addFoodToToday,
     removeFoodFromToday,
     timeHorizon,
     setTimeHorizon
 }: MyDayProps) => {
 
-    const [edit, setEdit] = useState(false);
     const [monthsBack, setMonthsBack] = useState(0);
 
     const topRecs = ['hi', 'hello', 'wtf is up'];
@@ -42,12 +39,9 @@ export const MyDay: React.FC<MyDayProps> = ({
                     <MenuItem value={7}>this week</MenuItem>
                     <MenuItem value={30}>this month</MenuItem>
                 </Select>
-                <button type="button" className="button-icon" onClick={() => setEdit(!edit)}>
-                    <img className='icon' src={pencil} alt='edit my day' />
-                </button>
             </div>
             {timeHorizon !== 30 ? <div className='chips-col col'>
-                {todaysFood && todaysFood.map((item, index) => {
+                {timeHorizonFoods && timeHorizonFoods.map((item, index) => {
                     return (
                         <FoodChip
                             // editing={edit}
@@ -66,7 +60,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                     )
                 })}
             </div> :
-                <Calendar monthsBack={monthsBack} food={todaysFood || []} />
+                <Calendar monthsBack={monthsBack} food={timeHorizonFoods || []} />
             }
         </div>
     );

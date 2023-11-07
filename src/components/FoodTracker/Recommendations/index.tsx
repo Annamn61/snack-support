@@ -18,7 +18,7 @@ interface RecommendationProps {
     recommendationType: any;
     setRecommendationType: (food: any) => void;
     recommendedFoods: any[];
-    todaysFood?: any[];
+    timeHorizonFoods?: any[];
     removeFoodFromToday: (id: number) => void;
     addFoodToToday: (id: number, amount: number, unit: string) => void;
 }
@@ -31,7 +31,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     recommendationType,
     setRecommendationType,
     recommendedFoods,
-    todaysFood,
+    timeHorizonFoods,
     removeFoodFromToday,
     addFoodToToday,
 }: RecommendationProps) => {
@@ -147,7 +147,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
             ) : <NoResults />}
 
             {openModal && <AddFoodModal
-                food={todaysFood}
+                food={timeHorizonFoods}
                 foodToAdd={modalFoodToAdd}
                 deleteFood={removeFoodFromToday}
                 addFoodToToday={addFoodToToday}

@@ -26,7 +26,7 @@
     }
 
     .percents {
-        width: 50px;
+        width: fit-content;
         gap: 4px;
 
         .augment {
@@ -86,6 +86,15 @@
             background-color: $lightBlue;
         }
     }
+    &.highlighted {
+        .active {
+            background-color: $orange;
+        }
+
+        .selectedFood {
+            background-color: $lightOrange;
+        }
+    }
 
     &:hover {
         cursor: pointer;
@@ -112,7 +121,17 @@
             }
 
             .selectedFood {
-                background-color: #B9B9B9;
+                background-color: #cccccc;
+            }
+        }
+
+        &.highlighted {
+            .active {
+                background-color: $orange;
+            }
+    
+            .selectedFood {
+                background-color: $lightOrange;
             }
         }
     }

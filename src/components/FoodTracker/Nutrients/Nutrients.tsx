@@ -85,10 +85,10 @@ export const Nutrients: React.FC<NutrientProps> = ({
             }
             <div className="nutrient-bars col">
                 {todaysNutrients.map((nut: { name: string, percentDV: number, percentOfSelectedFood: number }, index) => {
-                    const greyedOut = selectedNutrient ? selectedNutrient !== nut.name : false;
+                    const status = !selectedNutrient ? '' : selectedNutrient === nut.name ? 'highlighted' : 'greyed';
                     return (<PercentBar
                         key={nut.name + index}
-                        greyedOut={greyedOut}
+                        status={status}
                         setSelectedNutrient={selectedNutrient === nut.name ? () => setSelectedNutrient(undefined) : () => setSelectedNutrient(nut.name)}
                         name={nut.name}
                         percent={nut.percentDV}

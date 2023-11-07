@@ -9,7 +9,7 @@ interface FoodTrackerProps {
 
 export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
     const {
-        todaysFood,
+        timeHorizonFoods,
         addFoodToToday,
         removeFoodFromToday,
         selectedNutrient,
@@ -47,13 +47,13 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
                         recommendationType={recommendationType}
                         setRecommendationType={setRecommendationType}
                         recommendedFoods={recommendedFoods}
-                        todaysFood={todaysFood}
+                        timeHorizonFoods={timeHorizonFoods}
                         removeFoodFromToday={removeFoodFromToday}
                         addFoodToToday={addFoodToToday}
                         setSelectedNutrient={setSelectedNutrient}
                     />
                     <MyDay
-                        todaysFood={todaysFood}
+                        timeHorizonFoods={timeHorizonFoods}
                         addFoodToToday={addFoodToToday}
                         removeFoodFromToday={removeFoodFromToday}
                         timeHorizon={timeHorizon}

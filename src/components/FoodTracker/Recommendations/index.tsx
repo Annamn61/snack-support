@@ -9,8 +9,10 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { FoodCard } from '../FoodCard';
 import { AddFoodModal } from '../AddFoodModal';
+import { NoResults } from './NoResults';
 interface RecommendationProps {
     selectedNutrient: string | undefined;
+    setSelectedNutrient: (nutrient: any) => void;
     selectedFood: number | undefined;
     setSelectedFood: (food: any) => void;
     recommendationType: any;
@@ -23,6 +25,7 @@ interface RecommendationProps {
 
 export const Recommendations: React.FC<RecommendationProps> = ({
     selectedNutrient,
+    setSelectedNutrient,
     selectedFood,
     setSelectedFood,
     recommendationType,
@@ -35,7 +38,6 @@ export const Recommendations: React.FC<RecommendationProps> = ({
 
     const [sortOrder, setSortOrder] = useState('Most');
     const [recType, setRecType] = useState('calorie');
-    const [timePeriod, setTimePeriod] = useState('today');
     const [isSearching, setIsSearching] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [openModal, setOpenModal] = useState(false);
@@ -46,10 +48,10 @@ export const Recommendations: React.FC<RecommendationProps> = ({
             return true;
         }
         if (food.item.aisle.toLowerCase().includes(searchText.toLowerCase())) {
-          return true;
+            return true;
         }
         if (food.item.image.toLowerCase().includes(searchText.toLowerCase())) {
-          return true;
+            return true;
         }
         return food.item.categoryPath.map((category: string) => category.toLowerCase().includes(searchText.toLowerCase())).includes(true);
     }
@@ -68,7 +70,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 unit={rec.item.unit}
                 percent={(selectedNutrient !== undefined) && Math.round(rec.percent * 100) / 100}
                 onClick={selectedFood === rec.item.id ? () => setSelectedFood(undefined) : () => setSelectedFood(rec.item.id)}
-                onAdd={() => {setOpenModal(true); setModalFoodToAdd(rec.item)}}
+                onAdd={() => { setOpenModal(true); setModalFoodToAdd(rec.item) }}
             />)
         })
         if (sortOrder === "Most") {
@@ -116,21 +118,11 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                                 {sortOrder}
                                 <img src={sortOrder === 'Most' ? most : least} alt={sortOrder} />
                             </button>
-                            <button type="button" className="button-decorative" >
+                            <button type="button" className="button-decorative" onClick={() => setSelectedNutrient(undefined)}>
                                 <p>{selectedNutrient}</p>
                                 <img src={cancel} alt="cancel" />
                             </button>
-                        </> :
-                        <Select
-                            value={timePeriod}
-                            onChange={(e) => setTimePeriod(e.target.value)}
-                            displayEmpty
-                            inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                            <MenuItem value={'today'}>Today</MenuItem>
-                            <MenuItem value={'week'}>This Week</MenuItem>
-                            <MenuItem value={'month'}>This Month</MenuItem>
-                        </Select>
+                        </> : 'today'
                     }
                     per
                     <Select
@@ -147,10 +139,13 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                     (<p>{displayedFoods.length} results</p>)}
 
             </div>
-            <div className='card-row row'>
-                {displayedFoods.length > 0 ? displayedFoods : <p>No results</p>}
-                {/* {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()} */}
-            </div>
+            {displayedFoods.length > 0 ? (
+                <div className='card-row row'>
+                    {displayedFoods}
+                    {/* {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()} */}
+                </div>
+            ) : <NoResults />}
+
             {openModal && <AddFoodModal
                 food={todaysFood}
                 foodToAdd={modalFoodToAdd}

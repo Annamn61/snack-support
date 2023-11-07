@@ -39,7 +39,7 @@ def getBaseFoods(foodsToGet):
 
 
 if __name__ == "__main__":
-    foodsToGet = []
+    foodsToGet = [93730, 18033, 18044, 99156, 98871, 18971, 98895, 18029, 18060, 18027, 10118029, 18413, 18439, 93837]
     getBaseFoods(foodsToGet)
 
 

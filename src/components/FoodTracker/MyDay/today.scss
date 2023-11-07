@@ -3,12 +3,13 @@
 .today {
     border: 2px solid $green;
     border-radius: 16px;
-    padding: 24px 36px;
     height: 100%;
     gap: 20px;
+    overflow: hidden;
 
     &-header {
         justify-content: space-between;
+        padding: 24px 36px 0px 36px;
     }
 
     .addfood {
@@ -35,6 +36,54 @@
 
     .chips-col {
         gap: 8px;
+        width: calc(100% - 72px);
+        padding: 0px 36px 24px 36px;
+    }
+
+    .calendar {
         width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .week {
+            width: 100%;
+            flex-grow: 1;
+
+            .day {
+                width: 100%;
+                outline: 1px solid grey;
+                background-color: $neutral;
+                border: none;
+
+                &:hover {
+                    background-color: white;
+                    cursor: pointer;
+                }
+            }
+
+            &:last-child {
+                & > div:last-child {
+                    border-radius: 0px 0px 14px 0px;
+                }
+
+                & > div:first-child {
+                    border-radius: 0px 0px 0px 14px;
+                }
+            }
+        }
+    }
+    .dots-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px;
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background-color: pink;
+        }
     }
 }

@@ -131,6 +131,65 @@ import { dried_raisins } from './DriedRaisins';
 import { dried_sage } from './DriedSage';
 import { dried_strawberries } from './DriedStrawberries';
 import { dried_sweet_cherries } from './DriedSweetCherries';
+import { brioche } from './Brioche';
+import { dry_roasted_peanuts } from './DryRoastedPeanuts';
+import { durian_fruit } from './DurianFruit';
+import { eggplants } from './Eggplants';
+import { extra_lean_ground_beef } from './ExtraLeanGroundBeef';
+import { farfalle_pasta } from './FarfallePasta';
+import { farina } from './Farina';
+import { fat_free_buttermilk } from './Fat-FreeButtermilk';
+import { fennel } from './Fennel';
+import { full_fat_milk } from './FullFatMilk';
+import { golden_kiwifruit } from './GoldenKiwifruit';
+import { grape_fruit_juice } from './GrapeFruitJuice';
+import { grapefruits } from './Grapefruits';
+import { grape_juice } from './GrapeJuice';
+import { green_bell_pepper } from './GreenBellPepper';
+import { challah_bread } from './ChallahBread';
+import { english_muffins } from './EnglishMuffins';
+
+import { lobster_meat } from './LobsterMeat';
+import { lite_coconut_milk } from './LiteCoconutMilk';
+import { kiwifruit } from './Kiwifruit';
+import { juice_of_orange } from './JuiceOfOrange';
+import { japanese_eggplant } from './JapaneseEggplant';
+import { jack_fruit } from './JackFruit';
+import { instant_yeast } from './InstantYeast';
+import { ice_cream_cones } from './IceCreamCones';
+import { hempmilk } from './Hempmilk';
+import { hazel_nut_milk } from './HazelNutMilk';
+import { focacia } from './Focacia';
+import { french_loaf } from './FrenchLoaf';
+import { grilled_chicken } from './GrilledChicken';
+import { ground_beef_chuck } from './GroundBeefChuck';
+import { ground_nutmeg } from './GroundNutmeg';
+import { groundnut_oil } from './GroundnutOil';
+import { ground_paprika } from './GroundPaprika';
+import { guava_juice } from './GuavaJuice';
+import { half_n_half } from './HalfNHalf';
+import { hawaiian_bun } from './HawaiianBun';
+
+import { longan_fruit } from './LonganFruit';
+import { Luo_Han_Guo } from './LuoHanGuo';
+import { medjool_dates } from './MedjoolDates';
+import { naan_bread } from './NaanBread';
+import { neem_fruits } from './NeemFruits';
+import { no_salt_added_peanut_butter } from './NoSaltAddedPeanutButter';
+import { oat_drink } from './OatDrink';
+import { oil_packed_albacore_tuna } from './Oil-PackedAlbacoreTuna';
+import { oregano_leaves } from './OreganoLeaves';
+import { pak_choi } from './PakChoi';
+import { palm_fruit_oil } from './PalmFruitOil';
+import { papayas } from './Papayas';
+import { passionfruit } from './Passionfruit';
+import { passionfruit_juice } from './PassionfruitJuice';
+import { peanut_butter } from './PeanutButter';
+import { pear_juice } from './PearJuice';
+import { pepper_jack_cheese } from './PepperJackCheese';
+import { peppers } from './Peppers';
+import { persimmons } from './Persimmons';
+import { pineapple_juice } from "./PineappleJuice";
 
 export const baseFoods = [
     banana,
@@ -266,4 +325,61 @@ export const baseFoods = [
     dried_sage,
     dried_strawberries,
     dried_sweet_cherries,
+    brioche,
+    dry_roasted_peanuts,
+    durian_fruit,
+    eggplants,
+    farfalle_pasta,
+    farina,
+    fat_free_buttermilk, // 140
+    extra_lean_ground_beef,
+    fennel,
+    full_fat_milk,
+    golden_kiwifruit,
+    grape_fruit_juice,
+    grapefruits,
+    grape_juice,
+    green_bell_pepper,
+    challah_bread,
+    english_muffins, // 150
+    lobster_meat,
+    lite_coconut_milk,
+    kiwifruit,
+    juice_of_orange,
+    japanese_eggplant,
+    jack_fruit,
+    instant_yeast,
+    ice_cream_cones,
+    hempmilk,
+    hazel_nut_milk, // 160
+    focacia,
+    french_loaf,
+    grilled_chicken,
+    ground_beef_chuck,
+    ground_nutmeg,
+    groundnut_oil,
+    ground_paprika,
+    guava_juice,
+    half_n_half,
+    hawaiian_bun, // 170
+    longan_fruit,
+    Luo_Han_Guo,
+    medjool_dates,
+    naan_bread,
+    neem_fruits,
+    no_salt_added_peanut_butter,
+    oat_drink,
+    oil_packed_albacore_tuna,
+    oregano_leaves,
+    pak_choi, // 180
+    palm_fruit_oil,
+    papayas,
+    passionfruit,
+    passionfruit_juice,
+    peanut_butter,
+    pear_juice,
+    pepper_jack_cheese,
+    peppers,
+    persimmons,
+    pineapple_juice // 190
 ]

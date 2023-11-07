@@ -1,6 +1,7 @@
-import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { getFirestore, query, where } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import dayjs, { Dayjs } from "dayjs";
 
 
 const firebaseConfig = {
@@ -16,67 +17,70 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
- 
+
 export async function writeUserFood(name: string, id: number, amount: number, unit: string, date?: string) {
-    let formattedDate = date ? new Date(date) : new Date();
-    const result = await addDoc(collection(db, 'users/' + name + '/foods'), {
-        id,
-        addedDate: Number(formattedDate),
-        amount,
-        unit,
-      });
-    // use their returned uuid not MINEs
-    console.log('added', (result as any)._key.path.segments[3]);
-    return (result as any)._key.path.segments[3];
+  let formattedDate = date ? new Date(date) : new Date();
+  const result = await addDoc(collection(db, 'users/' + name + '/foods'), {
+    id,
+    addedDate: Number(formattedDate),
+    amount,
+    unit,
+  });
+  // use their returned uuid not MINEs
+  return (result as any)._key.path.segments[3];
 }
+
+export async function deleteUserFood(uuid: string) {
+  const name = 'anna';
+  const result = await deleteDoc(doc(db, 'users/' + name + '/foods', uuid));
+}
+
+const sortFoodsIntoDays = (startTime: number, numberOfDays: number, foods: any[]) => {
+  const dayArray: any[][] = new Array(numberOfDays).fill([]);
+  foods.forEach((food) => {
+    const difference = food.addedDate - startTime;
+    const index = Math.floor(difference / (24 * 60 * 60 * 1000));
+    dayArray[index] = [...dayArray[index], food];
+  })
+  return dayArray;
+}
+
+export const getFoodsInRange = async (startDate: Dayjs, numberOfDays: number) => {
+  const midnightStart = startDate.set('hour', 0).set('minute', 0).set('second', 0);
+  const midnightEnd = startDate.add(numberOfDays - 1, 'day').set('hour', 23).set('minute', 59).set('second', 59);
+
+  // const usersRef = collection(db, "users");
+  const currentUser = query(collection(db, "users", "anna", "foods"), where("addedDate", ">=", Number(midnightStart)), where("addedDate", "<", Number(midnightEnd)));
+
+  const querySnapshot = await getDocs(currentUser);
+  let foodsList: { pk: string; }[] = [];
+  querySnapshot.forEach((doc) => {
+    foodsList.push({
+      ...doc.data(),
+      pk: doc.id
+    })
+  });
+
+  return sortFoodsIntoDays(midnightStart.valueOf(), numberOfDays, foodsList);;
+} 
 
 export async function getUserFoods(name: string, from: number) {
-    let queryFrom = new Date();
-    queryFrom.setDate(queryFrom.getDate() - from);
+  // getRange(1, 2);
+  let queryFrom = new Date();
+  queryFrom.setDate(queryFrom.getDate() - from);
 
-    const usersRef = collection(db, "users");
-    // const currentUser = query(collection(db, "users", "anna", "foods"));
-    console.log(queryFrom);
-    const currentUser = query(collection(db, "users", "anna", "foods"), where("addedDate", ">=", Number(queryFrom)));
+  const usersRef = collection(db, "users");
+  // console.log(queryFrom);
+  const currentUser = query(collection(db, "users", "anna", "foods"), where("addedDate", ">=", Number(queryFrom)));
 
-    const querySnapshot = await getDocs(currentUser);
-    let foodsList: { pk: string; }[] = [];
-    querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-        foodsList.push({
-          ...doc.data(),
-          pk: doc.id
-        })
-      });
-    return foodsList;
-
-    // const dbRef = ref(getDatabase()).orderBy('addedDate');
-
-    // get(child(dbRef, `userFood/${name}`)).then((snapshot) => {
-    //     if (snapshot.exists()) {
-    //       console.log(snapshot.val());
-    //     } else {
-    //       console.log("No data available");
-    //     }
-    //   }).catch((error) => {
-    //     console.error(error);
-    //   });
-      
-
-    // let formattedDate = date ? new Date(date) : new Date();
-    // const db = getDatabase();
-    // set(ref(db, 'userFood/' + name + '/' + formattedDate), {
-    //     id,
-    //     amount,
-    //     unit,
-    // });
-}
-
-export function deleteUserFood(id: number, amount: string, email: string) {
-    // const db = getDatabase();
-    // set(ref(db, 'test/' + id), {
-    //     one: name,
-    //     two: email,
-    // });
+  const querySnapshot = await getDocs(currentUser);
+  let foodsList: { pk: string; }[] = [];
+  querySnapshot.forEach((doc) => {
+    // console.log(doc.id, " => ", doc.data());
+    foodsList.push({
+      ...doc.data(),
+      pk: doc.id
+    })
+  });
+  return foodsList;
 }

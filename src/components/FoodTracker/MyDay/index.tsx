@@ -4,6 +4,7 @@ import './today.scss'
 import { useState } from 'react';
 import { FoodChip } from '../FoodChip/foodchip';
 import { MenuItem, Select } from '@mui/material';
+import { Calendar } from './Calendar';
 interface MyDayProps {
     todaysFood?: any[];
     addFoodToToday: (item: any, amount: number, unit: string) => void;
@@ -21,12 +22,15 @@ export const MyDay: React.FC<MyDayProps> = ({
 }: MyDayProps) => {
 
     const [edit, setEdit] = useState(false);
+    const [monthsBack, setMonthsBack] = useState(0);
 
     const topRecs = ['hi', 'hello', 'wtf is up'];
     return (
         <div className="today col">
             <div className='today-header row'>
                 <h2>My Day</h2>
+                <button onClick={() => setMonthsBack(monthsBack + 1)}>'B'</button>
+                <button onClick={() => setMonthsBack(Math.max(monthsBack - 1, 0))}>'F'</button>
                 <Select
                     className="add-food-unit select-green"
                     value={timeHorizon}
@@ -42,7 +46,7 @@ export const MyDay: React.FC<MyDayProps> = ({
                     <img className='icon' src={pencil} alt='edit my day' />
                 </button>
             </div>
-            <div className='chips-col col'>
+            {timeHorizon !== 30 ? <div className='chips-col col'>
                 {todaysFood && todaysFood.map((item, index) => {
                     return (
                         <FoodChip
@@ -61,7 +65,9 @@ export const MyDay: React.FC<MyDayProps> = ({
                         />
                     )
                 })}
-            </div>
+            </div> :
+                <Calendar monthsBack={monthsBack} food={todaysFood || []} />
+            }
         </div>
     );
 };

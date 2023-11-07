@@ -3,7 +3,11 @@ import cancel from '../../../assets/CancelLight.svg';
 import calendar from '../../../assets/calendar.svg';
 import { FoodChip } from '../FoodChip/foodchip';
 import { MenuItem, Select, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 interface AddFoodModalProps {
     food?: any[],
@@ -20,9 +24,9 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
     closeModal,
     addFoodToToday,
 }: AddFoodModalProps) => {
-    console.log('FOOD', food);
     const [addingAmount, setAddingAmount] = useState(foodToAdd.amount);
     const [addingUnit, setAddingUnit] = useState(foodToAdd.unit);
+    const [value, setValue] = useState<Dayjs | null>(dayjs(new Date()));
 
     return (
         <div className="modal">
@@ -31,9 +35,13 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                 <div className="modal-header">
                     <div className="modal-title row">
                         <h2>Editing</h2>
-                        <button className="button-primary">
-                            <p>today</p><img src={calendar} />
-                        </button> {/* TODO: Should be a select */}
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Basic date picker"
+                                value={value}
+                                onChange={(newValue) => setValue(newValue)}
+                            />
+                        </LocalizationProvider>
                     </div>
                     <button onClick={() => closeModal()}>X</button>
                 </div>

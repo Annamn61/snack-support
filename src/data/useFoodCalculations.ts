@@ -3,7 +3,7 @@ import { baseFoods } from "./BaseFoods/_BaseIndex";
 import { DailyNutrientPercent } from "./Util/types";
 import { DRIs } from "./Util/DRIs";
 import { getTotalPercentDVWithSelectedFood, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
-import { getUserFoods, writeUserFood } from "./Util/firebase";
+import { deleteUserFood, getFoodsInRange, getUserFoods, writeUserFood } from "./Util/firebase";
 import { v4 as uuidv4 } from 'uuid';
 
 const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
@@ -105,11 +105,11 @@ export function useFoodCalculations() {
     const [recommendationType, setRecommendationType] = useState('serving');
     const recommendedFoods = useMemo(() => getRecommendedFoods(todaysFood, selectedNutrient, recommendationType), [todaysFood, selectedNutrient, recommendationType]);
     const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(todaysFood, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
+    // const dayRangeFoods = useMemo(() => getTotalPercentDVWithSelectedFood(todaysFood, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
 
     useEffect(() => {
         getUserFoods('anna', timeHorizon).then(result => {
             const res = result as { id: any, amount: number, unit: string, pk: string }[]
-            console.log('REST', res);
             setTodaysFoodsRemote(res);
         });
     }, [timeHorizon]);
@@ -134,9 +134,14 @@ export function useFoodCalculations() {
         setTodaysFood(foodsToSet);
     }
 
+    // const printFoodsFromRemoteTest = () => {
+
+    // }
+
     const removeFoodFromToday = (pk: number) => {
         const newFood = todaysFood.filter(food => food.pk !== pk);
         setTodaysFood(newFood);
+        deleteUserFood(`${pk}`);
     };
 
     return {

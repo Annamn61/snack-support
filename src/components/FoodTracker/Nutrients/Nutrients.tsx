@@ -53,18 +53,7 @@ export const Nutrients: React.FC<NutrientProps> = ({
             <div className="row">
                 <h2>Nutrient Breakdown</h2>
                 <div className="row">
-                    <p>Daily Value</p>
-                    <Select
-                        className="add-food-unit select-green"
-                        value={timeScale}
-                        onChange={(e) => setTimeScale(e.target.value)}
-                        displayEmpty
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        <MenuItem value={'day'}>Today</MenuItem>
-                        <MenuItem value={'week'}>This Week</MenuItem>
-                        <MenuItem value={'month'}>This Month</MenuItem>
-                    </Select>
+                    {null}
                 </div>
             </div>
             {selectedFood !== undefined ? <div className="row add-food" key={selectedFood}>

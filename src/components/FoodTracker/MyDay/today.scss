@@ -55,6 +55,21 @@
                 outline: 1px solid grey;
                 background-color: $neutral;
                 border: none;
+                p {
+                    margin-top: 4px;
+                    margin-left: 4px;
+                    line-height: 16px;
+                    padding: 4px;
+                    width: 16px !important;
+                    height: 16px !important;
+                    width: fit-content;
+                    border-radius: 16px;
+                    text-align: center;
+                    vertical-align: center;
+                    &.isToday {
+                        background-color: $pear;
+                    }
+                }
 
                 &:hover {
                     background-color: white;

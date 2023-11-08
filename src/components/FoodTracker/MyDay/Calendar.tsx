@@ -56,21 +56,6 @@ export const Calendar: React.FC<CalendarProps> = ({
         return currentDate.set('date', 1).subtract(firstWeekday, 'day');
     }, [currentDate, firstWeekday]);
 
-    const foodRangeItems = useMemo(async () => {
-        const ret = await getFoodsInRange(firstDisplayedDay, numWeeksDisplayed * daysInWeek);
-        return ret;
-    }, [numWeeksDisplayed, firstDisplayedDay]);
-
-    const displayedFoodRangeItems = useMemo(() => {
-        console.log('FRI', foodRangeItems);
-        return foodRangeItems;
-    }, [foodRangeItems]);
-
-    // useEffect(async () => {
-    //     const ret = await getFoodsInRange(firstDisplayedDay, numWeeksDisplayed * daysInWeek);
-    //     return ret;
-    // }, [numWeeksDisplayed, firstDisplayedDay])
-
     useEffect(() => {
         (async () => {
             const ret = await getFoodsInRange(firstDisplayedDay, numWeeksDisplayed * daysInWeek);
@@ -91,14 +76,11 @@ export const Calendar: React.FC<CalendarProps> = ({
                 return <div key={`week-${weekIndex}`} className="week row">
                     {Array.from(Array(daysInWeek)).map((value, dayIndex) => {
                         const totalIndex = (weekIndex * daysInWeek + dayIndex);
-                        return <div key={totalIndex} className="day">{getDayNumber(weekIndex, dayIndex)}<Dots foodList={renderedItems[totalIndex]} /></div>
+                        const isToday = false; // TODO:1 - calc if this is today
+                        return <div key={totalIndex} className="day"><p className={isToday ? 'isToday' : ''}>{getDayNumber(weekIndex, dayIndex)}</p><Dots foodList={renderedItems[totalIndex]} /></div>
                     })}
                 </div>
             })}
-            {/* <p>currentDate: {currentDate.toString()}</p>
-            <p>firstWeekday: {firstWeekday}</p>
-            <p>daysInMonth: {daysInMonth}</p>
-            <p>numWeeksDisplayed: {numWeeksDisplayed}</p> */}
         </div>
     );
 };

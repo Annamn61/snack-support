@@ -1,7 +1,7 @@
 import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { getFirestore, query, where } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 
 const firebaseConfig = {
@@ -49,7 +49,6 @@ export const getFoodsInRange = async (startDate: Dayjs, numberOfDays: number) =>
   const midnightStart = startDate.set('hour', 0).set('minute', 0).set('second', 0);
   const midnightEnd = startDate.add(numberOfDays - 1, 'day').set('hour', 23).set('minute', 59).set('second', 59);
 
-  // const usersRef = collection(db, "users");
   const currentUser = query(collection(db, "users", "anna", "foods"), where("addedDate", ">=", Number(midnightStart)), where("addedDate", "<", Number(midnightEnd)));
 
   const querySnapshot = await getDocs(currentUser);
@@ -65,18 +64,14 @@ export const getFoodsInRange = async (startDate: Dayjs, numberOfDays: number) =>
 } 
 
 export async function getUserFoods(name: string, from: number) {
-  // getRange(1, 2);
   let queryFrom = new Date();
   queryFrom.setDate(queryFrom.getDate() - from);
 
-  const usersRef = collection(db, "users");
-  // console.log(queryFrom);
   const currentUser = query(collection(db, "users", "anna", "foods"), where("addedDate", ">=", Number(queryFrom)));
 
   const querySnapshot = await getDocs(currentUser);
   let foodsList: { pk: string; }[] = [];
   querySnapshot.forEach((doc) => {
-    // console.log(doc.id, " => ", doc.data());
     foodsList.push({
       ...doc.data(),
       pk: doc.id

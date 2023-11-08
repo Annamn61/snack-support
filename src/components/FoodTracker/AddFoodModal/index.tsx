@@ -1,5 +1,5 @@
 import './addfoodmodal.scss'
-import cancel from '../../../assets/CancelLight.svg';
+import Cancel from '../../../assets/CancelLight.svg';
 import calendar from '../../../assets/calendar.svg';
 import { FoodChip } from '../FoodChip/foodchip';
 import { MenuItem, Select, TextField } from '@mui/material';
@@ -8,6 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import { getFoodsInRange } from '../../../data/Util/firebase';
 
 interface AddFoodModalProps {
     food?: any[],
@@ -26,7 +27,23 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
 }: AddFoodModalProps) => {
     const [addingAmount, setAddingAmount] = useState(foodToAdd.amount);
     const [addingUnit, setAddingUnit] = useState(foodToAdd.unit);
-    const [value, setValue] = useState<Dayjs | null>(dayjs(new Date()));
+    const [value, setValue] = useState<Dayjs | null>(dayjs());
+
+    const [renderedItems, setRenderedItems] = useState<any[][]>([]);
+
+    useEffect(() => {
+        (async () => {
+            if (value) {
+                const ret = await getFoodsInRange(value, 1);
+                // TODO -> Switch the items to ones with NAMES
+                setRenderedItems(ret[0]);
+            }
+        })();
+    }, [value]);
+
+    useEffect(() => {
+        console.log('value', value);
+    }, [value]);
 
     return (
         <div className="modal">
@@ -43,10 +60,10 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                             />
                         </LocalizationProvider>
                     </div>
-                    <button onClick={() => closeModal()}>X</button>
+                    <button onClick={() => closeModal()}><img src={Cancel} /></button>
                 </div>
                 <div className="modal-chips">
-                    {food && food.map((item) => <FoodChip
+                    {renderedItems && renderedItems.map((item) => <FoodChip
                         key={item.pk}
                         unit={item.unit}
                         name={item.name}

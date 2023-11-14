@@ -4,6 +4,38 @@ import { DailyNutrientPercent } from "./Util/types";
 import { DRIs } from "./Util/DRIs";
 import { getTotalPercentDVWithSelectedFood, getNormalizedFood, normalizeFoodsByCalories, normalizeFoodsByGrams } from "./Helpers/foodCalcHelpers";
 import { deleteUserFood, getFoodsInRange, getUserFoods, writeUserFood } from "./Util/firebase";
+import dayjs, { Dayjs } from "dayjs";
+
+export interface FoodCalcs {
+    timeHorizonFoods: any[][];
+    addFoodToDay: (day: Dayjs, id: any, amount: number, unit: string) => void;
+    removeFoodFromToday?: any, // FIX THIS
+    selectedNutrient: string | undefined,
+    setSelectedNutrient: (nutrient: string | undefined) => void;
+    selectedFood: number | undefined,
+    setSelectedFood: (food:( number | undefined)) => void;
+    setSelectedFoodAmounts: (sFA : { amount: number, unit: string }) => void;
+    recommendationType: string,
+    setRecommendationType: (recType: string) => void,
+    recommendedFoods: {
+        item: any;
+        score: number;
+        percent: number | undefined;
+    }[],
+    todaysNutrients: {
+        name: any;
+        percentDV: number;
+        percentOfSelectedFood: number;
+    }[],
+    timeHorizon: {
+        startDate: Dayjs;
+        length: number;
+    },
+    setTimeHorizon: (tH: {
+        startDate: Dayjs;
+        length: number;
+    }) => void,
+}
 
 const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
     let score = 0;
@@ -25,7 +57,7 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
 
 // looks at todays food items, returns all nutrients or vitamin by selected unit type
 // returns recommended foods (name, image, percent, amount, units) sorted by ranking
-const getRecommendedFoods = (timeHorizonFoodsByServing: any[], selectedNutrient: string | undefined, type: string) => {
+const getRecommendedFoods = (timeHorizonFoods: any[], selectedNutrient: string | undefined, type: string) => {
 
     const getNormalizedFood = () => {
         switch (type) {
@@ -39,7 +71,7 @@ const getRecommendedFoods = (timeHorizonFoodsByServing: any[], selectedNutrient:
     }
     const foodsToUse: any[] = getNormalizedFood();
 
-    const todaysPercents = getTotalPercentDVWithSelectedFood(timeHorizonFoodsByServing);
+    const todaysPercents = getTotalPercentDVWithSelectedFood(timeHorizonFoods);
     const rankings = foodsToUse.map((food) => {
         const score = calculateRecommendedScore(todaysPercents, food.nutrition.nutrients, selectedNutrient);
         // TODO: convert food item to grams for the unit, or pass the unit down?
@@ -92,61 +124,76 @@ const sortRankings = (a: {
     return b.score - a.score
 }
 
-export function useFoodCalculations() {
+const getReadableTimeHorizonFoods = (tHF: any[][]) => {
+    // Remove first few days of not the same month 
+    let newTHF: any[][] = [...tHF];
+    if (tHF.length > 7) {
+        tHF.forEach((foodSet, index) => {
+            // removes foods from prior month
+            if (index < 7 && foodSet.length > 0) {
+                const foodDate = foodSet[0].addedDate;
+                if(dayjs(foodDate).date() > 7) newTHF[index] = []
+            }
+            // removes foods from next month
+            if (index > 27 && foodSet.length > 0) {
+                const foodDate = foodSet[0].addedDate;
+                if(dayjs(foodDate).date() < 7) newTHF[index] = []
+            }
+        })
+    }
+
+    const mergedTH = newTHF.flat(1);
+    const foodsToSet = mergedTH.map(food => {
+        return { ...getNormalizedFood(food.id, food.amount, food.unit), pk: food.pk }
+    })
+    return foodsToSet;
+}
+
+export function useFoodCalculations(): FoodCalcs {
     // TODO: get todays food from firebase
-    const [timeHorizonFoods, setTimeHorizonFoods] = useState<any[]>([]);
-    const [timeHorizon, setTimeHorizon] = useState<number>(30);
+    const [timeHorizonFoods, setTimeHorizonFoods] = useState<any[][]>([]);
+    const [timeHorizon, setTimeHorizon] = useState<{ startDate: Dayjs, length: number }>({ startDate: dayjs().set('hour', 0).set('minute', 0).set('second', 0), length: 1 });
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
     const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
     const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{ amount: number, unit: string }>({ amount: 1, unit: 'serving' });
-    // const [selectedFood, setSelectedFood] = useState();
-    // const [timeHorizon, setTimeHorizon] = useState(1); // could be 1, 3, 7, 28 days
     const [recommendationType, setRecommendationType] = useState('serving');
-    const recommendedFoods = useMemo(() => getRecommendedFoods(timeHorizonFoods, selectedNutrient, recommendationType), [timeHorizonFoods, selectedNutrient, recommendationType]);
-    const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(timeHorizonFoods, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [timeHorizonFoods, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
-    // const dayRangeFoods = useMemo(() => getTotalPercentDVWithSelectedFood(todaysFood, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [todaysFood, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
+    const readableTimeHorizonFoods = useMemo(() => getReadableTimeHorizonFoods(timeHorizonFoods), [timeHorizonFoods]);
+    const recommendedFoods = useMemo(() => getRecommendedFoods(readableTimeHorizonFoods, selectedNutrient, recommendationType), [readableTimeHorizonFoods, selectedNutrient, recommendationType]);
+    const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(readableTimeHorizonFoods, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [readableTimeHorizonFoods, selectedFood, selectedFoodAmounts]); //may add other sort types ? 
 
     useEffect(() => {
-        getUserFoods('anna', timeHorizon).then(result => {
-            const res = result as { id: any, amount: number, unit: string, pk: string }[]
-            setTimeHorizonFoodsRemote(res);
+        getFoodsInRange(timeHorizon.startDate, timeHorizon.length).then(result => {
+            const res = result as { id: any, amount: number, unit: string, pk: string }[][];
+            setTimeHorizonFoods(res as any[][]);
         });
     }, [timeHorizon]);
 
-    useEffect(() => {
-        if (timeHorizonFoods.length < 1) return;
-        if (timeHorizonFoods.length < 2) return;
-    }, [timeHorizonFoods]);
-
-    const addFoodToToday = async (id: any, amount: number, unit: string) => {
-        const uuid = await writeUserFood('anna', id, amount, unit);
+    const addFoodToDay = async (day: Dayjs, id: any, amount: number, unit: string) => {
+        const uuid = await writeUserFood('anna', id, amount, unit, day);
         const newFood = getNormalizedFood(id, amount, unit);
         const addedFoodItem = { ...newFood, pk: uuid }
         if (newFood === undefined) return;
-        setTimeHorizonFoods([addedFoodItem, ...timeHorizonFoods]);
+        // only add to THF if the day is within the time Horizon
+        // setTimeHorizonFoods([addedFoodItem, ...timeHorizonFoods]);
     }
 
-    const setTimeHorizonFoodsRemote = async (foods: { id: any, amount: number, unit: string, pk: string }[]) => {
-        const foodsToSet = foods.map(food => {
-            return { ...getNormalizedFood(food.id, food.amount, food.unit), pk: food.pk }
-        })
-        setTimeHorizonFoods(foodsToSet);
-    }
-
-    // const printFoodsFromRemoteTest = () => {
-
+    // const setTimeHorizonFoodsRemote = async (foods: { id: any, amount: number, unit: string, pk: string }[][]) => {
+    //     const foodsToSet = foods.map(food => {
+    //         return { ...getNormalizedFood(food.id, food.amount, food.unit), pk: food.pk }
+    //     })
+    //     setTimeHorizonFoods(foodsToSet);
     // }
 
-    const removeFoodFromToday = (pk: number) => {
-        const newFood = timeHorizonFoods.filter(food => food.pk !== pk);
-        setTimeHorizonFoods(newFood);
-        deleteUserFood(`${pk}`);
-    };
+    // const removeFoodFromToday = (pk: number) => {
+    //     const newFood = timeHorizonFoods.filter(food => food.pk !== pk);
+    //     setTimeHorizonFoods(newFood);
+    //     deleteUserFood(`${pk}`);
+    // };
 
     return {
         timeHorizonFoods,
-        addFoodToToday,
-        removeFoodFromToday,
+        addFoodToDay,
+        // removeFoodFromToday,
         selectedNutrient,
         setSelectedNutrient,
         selectedFood,

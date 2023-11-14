@@ -1,7 +1,7 @@
 import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { getFirestore, query, where } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 
 const firebaseConfig = {
@@ -18,11 +18,11 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-export async function writeUserFood(name: string, id: number, amount: number, unit: string, date?: string) {
-  let formattedDate = date ? new Date(date) : new Date();
+export async function writeUserFood(name: string, id: number, amount: number, unit: string, day: Dayjs) {
+  console.log(name, id, amount, unit, day);
   const result = await addDoc(collection(db, 'users/' + name + '/foods'), {
     id,
-    addedDate: Number(formattedDate),
+    addedDate: day.valueOf(),
     amount,
     unit,
   });

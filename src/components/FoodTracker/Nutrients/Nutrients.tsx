@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { getFoodById } from "../../../data/Helpers/foodCalcHelpers";
+import dayjs, { Dayjs } from "dayjs";
 
 interface NutrientProps {
     selectedNutrient: string | undefined;
@@ -13,7 +14,8 @@ interface NutrientProps {
     selectedFood: number | undefined;
     setSelectedFood: (food: number | undefined) => void;
     setSelectedFoodAmounts: (amounts: { amount: number, unit: string }) => void;
-    addFoodToToday: (item: any, amount: number, unit: string) => void;
+    addFoodToDay: (day: Dayjs, item: any, amount: number, unit: string) => void;
+    timeHorizon: { startDate: Dayjs, length: number };
 }
 
 export const Nutrients: React.FC<NutrientProps> = ({
@@ -23,7 +25,8 @@ export const Nutrients: React.FC<NutrientProps> = ({
     selectedFood,
     setSelectedFood,
     setSelectedFoodAmounts,
-    addFoodToToday,
+    addFoodToDay,
+    timeHorizon,
 }: NutrientProps) => {
     const [unit, setUnit] = useState('serving');
     const [timeScale, setTimeScale] = useState('day');
@@ -79,7 +82,7 @@ export const Nutrients: React.FC<NutrientProps> = ({
                     <MenuItem value={'serving'}>serving(s)</MenuItem>
                     <MenuItem value={'grams'}>grams</MenuItem>
                 </Select>
-                <button type="button" className="button-primary" onClick={() => { addFoodToToday(selectedFood, amount, unit); setSelectedFood(undefined) }}>Add</button>
+                <button type="button" className="button-primary" onClick={() => { addFoodToDay(dayjs(), selectedFood, amount, unit); setSelectedFood(undefined) }}>Add</button>
             </div> :
                 <p className="augment">Select a food to see it's breakdown</p>
             }
@@ -87,6 +90,7 @@ export const Nutrients: React.FC<NutrientProps> = ({
                 {todaysNutrients.map((nut: { name: string, percentDV: number, percentOfSelectedFood: number }, index) => {
                     const status = !selectedNutrient ? '' : selectedNutrient === nut.name ? 'highlighted' : 'greyed';
                     return (<PercentBar
+                        timeHorizon={timeHorizon}
                         key={nut.name + index}
                         status={status}
                         setSelectedNutrient={selectedNutrient === nut.name ? () => setSelectedNutrient(undefined) : () => setSelectedNutrient(nut.name)}

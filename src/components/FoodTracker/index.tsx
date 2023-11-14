@@ -1,16 +1,16 @@
 import { Nutrients } from './Nutrients/Nutrients';
 import { Recommendations } from './Recommendations';
-import { useFoodCalculations } from '../../data/useFoodCalculations';
+import { FoodCalcs, useFoodCalculations } from '../../data/useFoodCalculations';
 import { MyDay } from './MyDay';
 
 interface FoodTrackerProps {
-    foodData: any;
+    foodData: FoodCalcs;
 }
 
 export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
     const {
         timeHorizonFoods,
-        addFoodToToday,
+        addFoodToDay,
         removeFoodFromToday,
         selectedNutrient,
         setSelectedNutrient,
@@ -36,7 +36,8 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
                         selectedNutrient={selectedNutrient}
                         setSelectedNutrient={setSelectedNutrient}
                         todaysNutrients={todaysNutrients}
-                        addFoodToToday={addFoodToToday}
+                        addFoodToDay={addFoodToDay}
+                        timeHorizon={timeHorizon}
                     />
                 </div>
                 <div className="content-left">
@@ -49,12 +50,12 @@ export const FoodTracker: React.FC<FoodTrackerProps> = ({ foodData }) => {
                         recommendedFoods={recommendedFoods}
                         timeHorizonFoods={timeHorizonFoods}
                         removeFoodFromToday={removeFoodFromToday}
-                        addFoodToToday={addFoodToToday}
+                        addFoodToDay={addFoodToDay}
                         setSelectedNutrient={setSelectedNutrient}
                     />
                     <MyDay
                         timeHorizonFoods={timeHorizonFoods}
-                        addFoodToToday={addFoodToToday}
+                        addFoodToDay={addFoodToDay}
                         removeFoodFromToday={removeFoodFromToday}
                         timeHorizon={timeHorizon}
                         setTimeHorizon={setTimeHorizon}

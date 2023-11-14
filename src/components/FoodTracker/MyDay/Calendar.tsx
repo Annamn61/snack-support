@@ -1,25 +1,24 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import './today.scss'
 import { useEffect, useMemo, useState } from 'react';
 import { Dots } from './Dots';
 import { getFoodsInRange } from '../../../data/Util/firebase';
 
 interface CalendarProps {
+    foods?: any[][],
     monthsBack: number,
-    food: any[],
-    // timeHorizon: number;
-    // setTimeHorizon: (tH: number) => void;
+    timeHorizon: { startDate: Dayjs, length: number };
+    setTimeHorizon: (tH: { startDate: Dayjs, length: number }) => void;
 }
 
 export const Calendar: React.FC<CalendarProps> = ({
+    foods, 
     monthsBack,
-    food,
-    // timeHorizon,
-    // setTimeHorizon
+    timeHorizon,
+    setTimeHorizon
 }: CalendarProps) => {
 
     const [currentDate, setCurrentDate] = useState(dayjs());
-    const [renderedItems, setRenderedItems] = useState<any[][]>([]);
 
     useEffect(() => {
         setCurrentDate(dayjs().subtract(monthsBack, 'month'));
@@ -43,41 +42,35 @@ export const Calendar: React.FC<CalendarProps> = ({
         Math.ceil((firstWeekday + daysInMonth) / 7)
     ), [firstWeekday, daysInMonth]);
 
-    const listedDays = useMemo(() => {
-        const totalDisplayed = numWeeksDisplayed * daysInWeek;
-        const currMonthDays = Array.from({ length: daysInMonth }, (value, index) => index + 1);
-        const prevMonthDays = Array.from({ length: firstWeekday }, (value, index) => daysInPreviousMonth - firstWeekday + index + 1);
-        const nextMonthDays = Array.from({ length: totalDisplayed - currMonthDays.length - prevMonthDays.length }, (value, index) => index + 1);
-
-        return [...prevMonthDays, ...currMonthDays, ...nextMonthDays];
-    }, [daysInPreviousMonth, daysInMonth, firstWeekday, numWeeksDisplayed]);
-
     const firstDisplayedDay = useMemo(() => {
         return currentDate.set('date', 1).subtract(firstWeekday, 'day');
     }, [currentDate, firstWeekday]);
 
     useEffect(() => {
-        (async () => {
-            const ret = await getFoodsInRange(firstDisplayedDay, numWeeksDisplayed * daysInWeek);
-            setRenderedItems(ret);
-        })();
+        setTimeHorizon({ startDate: firstDisplayedDay.set('hour', 0).set('minute', 0).set('second', 0), length: numWeeksDisplayed * 7 });
     }, [numWeeksDisplayed, firstDisplayedDay]);
-
-
-    const getDayNumber = (weekIndex: number, dayIndex: number) => {
-        const totalIndex = (weekIndex * daysInWeek + dayIndex);
-        return listedDays[totalIndex];
-    }
 
     return (
         <div className="calendar">
             {currentDate.format('MMMM')}
-            {Array.from(Array(numWeeksDisplayed)).map((value, weekIndex) => {
+            {foods && Array.from(Array(numWeeksDisplayed)).map((value, weekIndex) => {
                 return <div key={`week-${weekIndex}`} className="week row">
                     {Array.from(Array(daysInWeek)).map((value, dayIndex) => {
                         const totalIndex = (weekIndex * daysInWeek + dayIndex);
-                        const isToday = false; // TODO:1 - calc if this is today
-                        return <div key={totalIndex} className="day"><p className={isToday ? 'isToday' : ''}>{getDayNumber(weekIndex, dayIndex)}</p><Dots foodList={renderedItems[totalIndex]} /></div>
+                        const fullDay = firstDisplayedDay.add(totalIndex, 'day');
+                        const isToday = fullDay.isSame(dayjs(), 'day');
+                        return (
+                            <div
+                                key={totalIndex}
+                                className="day"
+                                onClick={() => setTimeHorizon({ startDate: fullDay.set('hour', 0).set('minute', 0).set('second', 0), length: 1 })}
+                            >
+                                <p className={isToday ? 'isToday' : ''}>
+                                    {fullDay.date()}
+                                </p>
+                                <Dots dotKey={`day-${dayIndex}`} foodList={foods[totalIndex]} />
+                            </div>
+                        )
                     })}
                 </div>
             })}

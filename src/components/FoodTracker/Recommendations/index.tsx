@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { FoodCard } from '../FoodCard';
 import { AddFoodModal } from '../AddFoodModal';
 import { NoResults } from './NoResults';
+import { Dayjs } from 'dayjs';
 interface RecommendationProps {
     selectedNutrient: string | undefined;
     setSelectedNutrient: (nutrient: any) => void;
@@ -18,9 +19,9 @@ interface RecommendationProps {
     recommendationType: any;
     setRecommendationType: (food: any) => void;
     recommendedFoods: any[];
-    timeHorizonFoods?: any[];
+    timeHorizonFoods?: any[][];
     removeFoodFromToday: (id: number) => void;
-    addFoodToToday: (id: number, amount: number, unit: string) => void;
+    addFoodToDay: (day: Dayjs, id: number, amount: number, unit: string) => void;
 }
 
 export const Recommendations: React.FC<RecommendationProps> = ({
@@ -33,7 +34,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
     recommendedFoods,
     timeHorizonFoods,
     removeFoodFromToday,
-    addFoodToToday,
+    addFoodToDay,
 }: RecommendationProps) => {
 
     const [sortOrder, setSortOrder] = useState('Most');
@@ -147,10 +148,9 @@ export const Recommendations: React.FC<RecommendationProps> = ({
             ) : <NoResults />}
 
             {openModal && <AddFoodModal
-                food={timeHorizonFoods}
                 foodToAdd={modalFoodToAdd}
                 deleteFood={removeFoodFromToday}
-                addFoodToToday={addFoodToToday}
+                addFoodToDay={addFoodToDay}
                 closeModal={() => setOpenModal(false)} />
             }
         </div>

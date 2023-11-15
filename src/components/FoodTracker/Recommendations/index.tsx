@@ -1,5 +1,5 @@
 import './recommendations.scss'
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import most from '../../../assets/Most.svg';
 import least from '../../../assets/Least.svg';
 import cancel from '../../../assets/Cancel.svg';
@@ -10,32 +10,21 @@ import MenuItem from '@mui/material/MenuItem';
 import { FoodCard } from '../FoodCard';
 import { AddFoodModal } from '../AddFoodModal';
 import { NoResults } from './NoResults';
-import { Dayjs } from 'dayjs';
-interface RecommendationProps {
-    selectedNutrient: string | undefined;
-    setSelectedNutrient: (nutrient: any) => void;
-    selectedFood: number | undefined;
-    setSelectedFood: (food: any) => void;
-    recommendationType: any;
-    setRecommendationType: (food: any) => void;
-    recommendedFoods: any[];
-    timeHorizonFoods?: any[][];
-    removeFoodFromToday: (id: number) => void;
-    addFoodToDay: (day: Dayjs, id: number, amount: number, unit: string) => void;
-}
+import { FoodContext } from '../../../data/FoodContext';
 
-export const Recommendations: React.FC<RecommendationProps> = ({
-    selectedNutrient,
-    setSelectedNutrient,
-    selectedFood,
-    setSelectedFood,
-    recommendationType,
-    setRecommendationType,
-    recommendedFoods,
-    timeHorizonFoods,
-    removeFoodFromToday,
-    addFoodToDay,
-}: RecommendationProps) => {
+export const Recommendations: React.FC = () => {
+
+    const {
+        addFoodToDay,
+        removeFoodFromToday,
+        selectedNutrient,
+        setSelectedNutrient,
+        selectedFood,
+        setSelectedFood,
+        recommendationType,
+        setRecommendationType,
+        recommendedFoods,
+    } = useContext(FoodContext);
 
     const [sortOrder, setSortOrder] = useState('Most');
     const [recType, setRecType] = useState('calorie');
@@ -69,7 +58,7 @@ export const Recommendations: React.FC<RecommendationProps> = ({
                 image={rec.item.image}
                 amount={+(rec.item.amount.toFixed(2))}
                 unit={rec.item.unit}
-                percent={(selectedNutrient !== undefined) && Math.round(rec.percent * 100) / 100}
+                percent={(selectedNutrient !== undefined && rec.percent !== undefined) && Math.round(rec.percent * 100) / 100}
                 onClick={selectedFood === rec.item.id ? () => setSelectedFood(undefined) : () => setSelectedFood(rec.item.id)}
                 onAdd={() => { setOpenModal(true); setModalFoodToAdd(rec.item) }}
             />)

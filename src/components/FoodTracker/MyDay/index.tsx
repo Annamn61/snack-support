@@ -1,24 +1,19 @@
 import './today.scss'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FoodChip } from '../FoodChip/foodchip';
 import { MenuItem, Select } from '@mui/material';
 import { Calendar } from './Calendar';
 import dayjs, { Dayjs } from 'dayjs';
-interface MyDayProps {
-    timeHorizonFoods?: any[][];
-    addFoodToDay: (day: Dayjs, item: any, amount: number, unit: string) => void;
-    removeFoodFromToday: (id: number) => void;
-    timeHorizon: { startDate: Dayjs, length: number };
-    setTimeHorizon: (tH: { startDate: Dayjs, length: number }) => void;
-}
+import { FoodContext } from '../../../data/FoodContext';
 
-export const MyDay: React.FC<MyDayProps> = ({
-    timeHorizonFoods,
-    addFoodToDay,
-    removeFoodFromToday,
-    timeHorizon,
-    setTimeHorizon
-}: MyDayProps) => {
+export const MyDay: React.FC = () => {
+
+    const {
+        timeHorizonFoods,
+        removeFoodFromToday,
+        timeHorizon,
+        setTimeHorizon
+    } = useContext(FoodContext);
 
     const [monthsBack, setMonthsBack] = useState(0);
 

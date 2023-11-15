@@ -1,0 +1,95 @@
+
+// Context.js
+import dayjs, { Dayjs } from "dayjs";
+import React, { createContext, useEffect, useMemo, useState } from "react";
+import { getReadableTimeHorizonFoods, getRecommendedFoods, getTotalPercentDVWithSelectedFood, sortPercentDV, getNormalizedFood } from "./Helpers/foodCalcHelpers";
+import { getFoodsInRange, writeUserFood } from "./Util/firebase";
+import { FoodCalcs } from "./Util/types";
+
+export const FoodContext = createContext<FoodCalcs>({
+    timeHorizonFoods: [],
+    addFoodToDay: function (day: Dayjs, id: any, amount: number, unit: string): void {
+        throw new Error("Function not implemented.");
+    },
+    selectedNutrient: undefined,
+    setSelectedNutrient: function (nutrient: string | undefined): void {
+        throw new Error("Function not implemented.");
+    },
+    selectedFood: undefined,
+    setSelectedFood: function (food: number | undefined): void {
+        throw new Error("Function not implemented.");
+    },
+    setSelectedFoodAmounts: function (sFA: { amount: number; unit: string; }): void {
+        throw new Error("Function not implemented.");
+    },
+    recommendationType: "",
+    setRecommendationType: function (recType: string): void {
+        throw new Error("Function not implemented.");
+    },
+    recommendedFoods: [],
+    todaysNutrients: [],
+    timeHorizon: {
+        startDate: dayjs(),
+        length: 0
+    },
+    setTimeHorizon: function (tH: { startDate: Dayjs; length: number; }): void {
+        throw new Error("Function not implemented.");
+    }
+});
+
+export const FoodContextProvider = ({ children }: any) => {
+    const [timeHorizonFoods, setTimeHorizonFoods] = useState<any[][]>([]);
+    const [timeHorizon, setTimeHorizon] = useState<{ startDate: Dayjs, length: number }>({ startDate: dayjs().set('hour', 0).set('minute', 0).set('second', 0), length: 1 });
+    const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
+    const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
+    const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{ amount: number, unit: string }>({ amount: 1, unit: 'serving' });
+    const [recommendationType, setRecommendationType] = useState('serving');
+    const readableTimeHorizonFoods = useMemo(() => getReadableTimeHorizonFoods(timeHorizonFoods), [timeHorizonFoods]);
+    const recommendedFoods = useMemo(() => getRecommendedFoods(readableTimeHorizonFoods, selectedNutrient, recommendationType), [readableTimeHorizonFoods, selectedNutrient, recommendationType]);
+    const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(readableTimeHorizonFoods, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [readableTimeHorizonFoods, selectedFood, selectedFoodAmounts]); //may add other sort types ?
+
+    useEffect(() => {
+        getFoodsInRange(timeHorizon.startDate, timeHorizon.length).then(result => {
+            const res = result as { id: any, amount: number, unit: string, pk: string }[][];
+            setTimeHorizonFoods(res as any[][]);
+        });
+    }, [timeHorizon]);
+
+    const addFoodToDay = async (day: Dayjs, id: any, amount: number, unit: string) => {
+        const uuid = await writeUserFood('anna', id, amount, unit, day);
+        const newFood = getNormalizedFood(id, amount, unit);
+        const addedFoodItem = { ...newFood, pk: uuid }
+        if (newFood === undefined) return;
+        // only add to THF if the day is within the time Horizon
+        // setTimeHorizonFoods([addedFoodItem, ...timeHorizonFoods]);
+    }
+
+    // const removeFoodFromToday = (pk: number) => {
+    //     const newFood = timeHorizonFoods.filter(food => food.pk !== pk);
+    //     setTimeHorizonFoods(newFood);
+    //     deleteUserFood(`${pk}`);
+    // };
+
+    return (
+        <FoodContext.Provider value={
+            {
+                timeHorizonFoods,
+                addFoodToDay,
+                // removeFoodFromToday,
+                selectedNutrient,
+                setSelectedNutrient,
+                selectedFood,
+                setSelectedFood,
+                setSelectedFoodAmounts,
+                recommendationType,
+                setRecommendationType,
+                recommendedFoods,
+                todaysNutrients,
+                timeHorizon,
+                setTimeHorizon,
+            }
+        }>
+            {children}
+        </FoodContext.Provider>
+    );
+};

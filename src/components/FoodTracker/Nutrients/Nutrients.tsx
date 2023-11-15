@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PercentBar } from "./PercentBar";
 import './nutrients.scss'
 import TextField from "@mui/material/TextField";
@@ -6,28 +6,21 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { getFoodById } from "../../../data/Helpers/foodCalcHelpers";
 import dayjs, { Dayjs } from "dayjs";
+import { FoodContext } from "../../../data/FoodContext";
 
-interface NutrientProps {
-    selectedNutrient: string | undefined;
-    setSelectedNutrient: (vitamin: string | undefined) => void;
-    todaysNutrients: any[];
-    selectedFood: number | undefined;
-    setSelectedFood: (food: number | undefined) => void;
-    setSelectedFoodAmounts: (amounts: { amount: number, unit: string }) => void;
-    addFoodToDay: (day: Dayjs, item: any, amount: number, unit: string) => void;
-    timeHorizon: { startDate: Dayjs, length: number };
-}
+export const Nutrients: React.FC = () => {
 
-export const Nutrients: React.FC<NutrientProps> = ({
-    selectedNutrient,
-    setSelectedNutrient,
-    todaysNutrients,
-    selectedFood,
-    setSelectedFood,
-    setSelectedFoodAmounts,
-    addFoodToDay,
-    timeHorizon,
-}: NutrientProps) => {
+    const {
+        selectedNutrient,
+        setSelectedNutrient,
+        todaysNutrients,
+        selectedFood,
+        setSelectedFood,
+        setSelectedFoodAmounts,
+        addFoodToDay,
+        timeHorizon,
+    } = useContext(FoodContext);
+
     const [unit, setUnit] = useState('serving');
     const [timeScale, setTimeScale] = useState('day');
     const [amount, setAmount] = useState(0);

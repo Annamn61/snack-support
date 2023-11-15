@@ -1,16 +1,12 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { NutrientPercent } from './NutrientPercent';
 import './data.scss';
-import { FoodCalcs } from '../../data/useFoodCalculations';
 import dayjs from 'dayjs';
+import { FoodContext } from '../../data/FoodContext';
 
-interface DataPageProps {
-    foodData: FoodCalcs;
-}
+export const DataPage: React.FC = () => {
 
-export const DataPage: React.FC<DataPageProps> = ({ foodData }) => {
-
-    const { addFoodToDay, timeHorizonFoods } = foodData;
+    const { addFoodToDay, timeHorizonFoods } = useContext(FoodContext);
 
     useEffect(() => {
         addFoodToDay(dayjs(), 11090, 1, 'serving');
@@ -22,7 +18,7 @@ export const DataPage: React.FC<DataPageProps> = ({ foodData }) => {
                 hi
             </div>
             <div className="data-content">
-                <NutrientPercent food={foodData.timeHorizonFoods} />
+                <NutrientPercent food={timeHorizonFoods} />
             </div>
         </div>
     );

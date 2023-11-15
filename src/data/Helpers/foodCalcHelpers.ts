@@ -1,17 +1,19 @@
+import dayjs from "dayjs";
 import { baseFoods } from "../BaseFoods/_BaseIndex";
 import { DRIs } from "../Util/DRIs";
+import { DailyNutrientPercent } from "../Util/types";
 
-export const sortRankings = (a: {
-    name: string,
-    image: string,
-    percent: number,
-}, b: {
-    name: string,
-    image: string,
-    percent: number,
-}) => {
-    return b.percent - a.percent
-}
+// export const sortRankings = (a: {
+//     name: string,
+//     image: string,
+//     percent: number,
+// }, b: {
+//     name: string,
+//     image: string,
+//     percent: number,
+// }) => {
+//     return b.percent - a.percent
+// }
 
 export const normalizeFoodsByCalories = (calories: number) => {
     return baseFoods.map((food) => {
@@ -134,4 +136,91 @@ export const getTotalPercentDVWithSelectedFood = (timeHorizonFoods: any[], selec
             percentOfSelectedFood: percentOfSelectedFood,
         }
     });
+}
+
+export const sortPercentDV = (a: { name: string, percentDV: number }, b: { name: string, percentDV: number }) => {
+    return a.percentDV - b.percentDV;
+}
+
+export const sortRankings = (a: {
+    item: any,
+    score: number,
+}, b: {
+    item: any,
+    score: number,
+}) => {
+    return b.score - a.score
+}
+
+export const getReadableTimeHorizonFoods = (tHF: any[][]) => {
+    // Remove first few days of not the same month 
+    let newTHF: any[][] = [...tHF];
+    if (tHF.length > 7) {
+        tHF.forEach((foodSet, index) => {
+            // removes foods from prior month
+            if (index < 7 && foodSet.length > 0) {
+                const foodDate = foodSet[0].addedDate;
+                if(dayjs(foodDate).date() > 7) newTHF[index] = []
+            }
+            // removes foods from next month
+            if (index > 27 && foodSet.length > 0) {
+                const foodDate = foodSet[0].addedDate;
+                if(dayjs(foodDate).date() < 7) newTHF[index] = []
+            }
+        })
+    }
+
+    const mergedTH = newTHF.flat(1);
+    const foodsToSet = mergedTH.map(food => {
+        return { ...getNormalizedFood(food.id, food.amount, food.unit), pk: food.pk }
+    })
+    return foodsToSet;
+}
+
+// looks at todays food items, returns all nutrients or vitamin by selected unit type
+// returns recommended foods (name, image, percent, amount, units) sorted by ranking
+export const getRecommendedFoods = (timeHorizonFoods: any[], selectedNutrient: string | undefined, type: string) => {
+
+    const getNormalizedFood = () => {
+        switch (type) {
+            case 'calorie':
+                return normalizeFoodsByCalories(100);
+            case 'gram':
+                return normalizeFoodsByGrams(100);
+            default:
+                return baseFoods
+        };
+    }
+    const foodsToUse: any[] = getNormalizedFood();
+
+    const todaysPercents = getTotalPercentDVWithSelectedFood(timeHorizonFoods);
+    const rankings = foodsToUse.map((food) => {
+        const score = calculateRecommendedScore(todaysPercents, food.nutrition.nutrients, selectedNutrient);
+        // TODO: convert food item to grams for the unit, or pass the unit down?
+
+        return {
+            item: food,
+            score: score,
+            percent: selectedNutrient ? score : undefined,
+        }
+    })
+    return rankings.sort(sortRankings);
+}
+
+const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodItemNutrients: any[], selectedNutrient: string | undefined) => {
+    let score = 0;
+    let selectedNutrientDRI: { name: string; amount: number; unit: string; }[] = [];
+    if (selectedNutrient) {
+        let nutrientDri = DRIs[0].micronutrients.find((nut) => nut.name === selectedNutrient);
+        selectedNutrientDRI = nutrientDri ? [nutrientDri] : [];
+    }
+    let scoredDris = selectedNutrient ? selectedNutrientDRI : DRIs[0].micronutrients;
+    scoredDris.forEach(element => {
+        const nutrientInformation = foodItemNutrients.find(foodItemNutrients => foodItemNutrients.name === element.name);
+        let singleServingPercent = (nutrientInformation ? nutrientInformation.amount / element.amount : 0) * 100
+        if (element.amount === 0) singleServingPercent = 0;
+        const dailyRemainingPercent = todaysPercents.find(todaysElement => element.name === todaysElement.name)?.percentDV
+        score += selectedNutrient ? singleServingPercent : Math.min(dailyRemainingPercent ? 100 - dailyRemainingPercent : 100, singleServingPercent);
+    });
+    return score;
 }

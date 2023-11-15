@@ -6,7 +6,7 @@ export const Header: React.FC = () => {
   return (
     <div className="header">
       <a href="/">
-        <img src={logo} alt="home logo"/>
+        <img src={logo} alt="home logo" />
       </a>
       <a href="/data">
         Data

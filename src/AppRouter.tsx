@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Routes, Route }
 import FoodTracker from './components/FoodTracker';
 import { DataPage } from './components/DataPage';
 
-export const AppRouter: React.FC<{foodData: any}> = ({ foodData }) => {
+export const AppRouter: React.FC = () => {
     return (
         <Router>
         <Routes>
-          <Route path='/' element={<FoodTracker foodData={foodData} />} />
-          <Route path='/data' element={<DataPage foodData={foodData} />} />
+          <Route path='/' element={<FoodTracker />} />
+          <Route path='/data' element={<DataPage />} />
         </Routes>
         </Router>
     );

@@ -3,7 +3,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { getReadableTimeHorizonFoods, getRecommendedFoods, getTotalPercentDVWithSelectedFood, sortPercentDV, getNormalizedFood } from "./Helpers/foodCalcHelpers";
-import { getFoodsInRange, writeUserFood } from "./Util/firebase";
+import { deleteUserFood, getFoodsInRange, writeUserFood } from "./Util/firebase";
 import { FoodCalcs } from "./Util/types";
 
 export const FoodContext = createContext<FoodCalcs>({
@@ -64,18 +64,22 @@ export const FoodContextProvider = ({ children }: any) => {
         // setTimeHorizonFoods([addedFoodItem, ...timeHorizonFoods]);
     }
 
-    // const removeFoodFromToday = (pk: number) => {
-    //     const newFood = timeHorizonFoods.filter(food => food.pk !== pk);
-    //     setTimeHorizonFoods(newFood);
-    //     deleteUserFood(`${pk}`);
-    // };
+    const removeFoodFromToday = (pk: number) => {
+        const thFcopy = [...timeHorizonFoods];
+        timeHorizonFoods.forEach((day, index) => {
+            const newDay = day.filter(food => food.pk !== pk);
+            thFcopy[index] = newDay;
+        })
+        setTimeHorizonFoods(thFcopy);
+        deleteUserFood(`${pk}`);
+    };
 
     return (
         <FoodContext.Provider value={
             {
                 timeHorizonFoods,
                 addFoodToDay,
-                // removeFoodFromToday,
+                removeFoodFromToday,
                 selectedNutrient,
                 setSelectedNutrient,
                 selectedFood,

@@ -13,7 +13,7 @@ import { getFoodsInRange } from '../../../data/Util/firebase';
 interface AddFoodModalProps {
     foodToAdd: any,
     deleteFood: (pk: number) => void,
-    addFoodToDay: (day: Dayjs, id: number, amount: number, unit: string) => void,
+    addFoodToDay: (day: Dayjs, id: string, amount: number, unit: string) => void,
     closeModal: () => void,
 }
 
@@ -26,17 +26,60 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
     const [addingAmount, setAddingAmount] = useState(foodToAdd.amount);
     const [addingUnit, setAddingUnit] = useState(foodToAdd.unit);
     const [value, setValue] = useState<Dayjs | null>(dayjs());
-
-    const [renderedItems, setRenderedItems] = useState<any[]>([]);
+    const [initialItems, setInitialItems] = useState<{
+        addedDate: number, pk: string, id: number, amount: number, unit: string
+    }[]>([]);
+    const [renderedItems, setRenderedItems] = useState<{
+        addedDate: number, pk: string, id: number, amount: number, unit: string
+    }[]>([]);
 
     useEffect(() => {
         (async () => {
             if (value) {
                 const ret = await getFoodsInRange(value, 1);
+                setInitialItems(ret[0]);
                 setRenderedItems(ret[0]);
             }
         })();
     }, [value]);
+
+    const removeItem = (pk: string) => {
+        setRenderedItems(renderedItems.filter(food => food.pk !== pk));
+    }
+
+    const addItem = (day: Dayjs, id: number, amount: number, unit: string) => {
+        const newItem = {
+            addedDate: day.valueOf(),
+            pk: 'tempUUID' + Math.random(),
+            id,
+            unit,
+            amount,
+        }
+        const newRendered = [...renderedItems];
+        newRendered.push(newItem);
+        setRenderedItems(newRendered);
+    }
+
+    const saveItems = () => {
+        const initialPks = initialItems.map(item => item.pk);
+        const renderedPks = renderedItems.map(item => item.pk);
+        // Todo on save - either instead of return do add and delete
+        // OR find a way to do a group add and delete in one call
+
+        // check instead for includes a temp UUID
+        const addedPks = renderedItems.map(renderedItem => {
+            if (!initialPks.includes(renderedItem.pk)) {
+                return renderedItem.pk;
+            }
+        });
+        const removedPks = initialPks.map(initPk => {
+            if (!renderedPks.includes(initPk)) {
+                return initPk;
+            }
+        });
+        console.log('added', addedPks);
+        console.log('removed', removedPks);
+    }
 
     return (
         <div className="modal">
@@ -62,7 +105,7 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                         unit={item.unit}
                         amount={item.amount}
                         style={'beige'}
-                        onDelete={() => deleteFood(item.pk)}
+                        onDelete={() => removeItem(item.pk)}
                     />
                     )}
                 </div>
@@ -90,17 +133,24 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                             <MenuItem value={'grams'}>grams</MenuItem>
                         </Select>
                         <p>{foodToAdd.name}</p>
-                        <button type="button" className="button-primary" onClick={() => addFoodToDay(value!, foodToAdd.id, addingAmount, addingUnit)}>Add</button>
+                        <button
+                            type="button"
+                            className="button-primary"
+                            onClick={() => addItem(value!, foodToAdd.id, addingAmount, addingUnit)}
+                        >
+                            Add
+                        </button>
                     </div>
                 </div>
                 <div className="modal-footer">
                     <button onClick={() => closeModal()}>Cancel</button>
-                    <button>Save</button>
+                    <button onClick={() => saveItems()}>Save</button>
                 </div>
             </div>
         </div>
-
-
-
     );
 };
+
+function uuidv4() {
+    throw new Error('Function not implemented.');
+}

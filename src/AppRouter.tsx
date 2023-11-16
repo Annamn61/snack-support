@@ -5,7 +5,7 @@ import { DataPage } from './components/DataPage';
 
 export const AppRouter: React.FC = () => {
     return (
-        <Router>
+        <Router basename={"/snack-support"}>
         <Routes>
           <Route path='/' element={<FoodTracker />} />
           <Route path='/data' element={<DataPage />} />

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/snack-support/static/css/main.513fd3fc.css",
-    "main.js": "/snack-support/static/js/main.f444eb3b.js",
+    "main.js": "/snack-support/static/js/main.16bf1481.js",
     "static/js/787.b34c94fa.chunk.js": "/snack-support/static/js/787.b34c94fa.chunk.js",
     "static/media/OhNuts.png": "/snack-support/static/media/OhNuts.6ef07d86f1d428ba6a08.png",
     "static/media/FF_Logo.svg": "/snack-support/static/media/FF_Logo.09139fb4ce5f4c2fc7fb31144db4e2eb.svg",
@@ -12,11 +12,11 @@
     "static/media/Cancel.svg": "/snack-support/static/media/Cancel.d55085b12bc34c81199cd813083e74d8.svg",
     "static/media/CancelLight.svg": "/snack-support/static/media/CancelLight.09810d6d09f3754e31207d7277cfa35e.svg",
     "main.513fd3fc.css.map": "/snack-support/static/css/main.513fd3fc.css.map",
-    "main.f444eb3b.js.map": "/snack-support/static/js/main.f444eb3b.js.map",
+    "main.16bf1481.js.map": "/snack-support/static/js/main.16bf1481.js.map",
     "787.b34c94fa.chunk.js.map": "/snack-support/static/js/787.b34c94fa.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.513fd3fc.css",
-    "static/js/main.f444eb3b.js"
+    "static/js/main.16bf1481.js"
   ]
 }

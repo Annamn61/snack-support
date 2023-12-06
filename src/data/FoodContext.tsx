@@ -3,7 +3,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { getReadableTimeHorizonFoods, getRecommendedFoods, getTotalPercentDVWithSelectedFood, sortPercentDV, getNormalizedFood } from "./Helpers/foodCalcHelpers";
-import { deleteUserFood, getFoodsInRange, writeUserFood } from "./Util/firebase";
+import { deleteUserFood, getFoodsInRange, writeUserFood } from "./Util/firebaseFirestore";
 import { FoodCalcs } from "./Util/types";
 
 export const FoodContext = createContext<FoodCalcs>({
@@ -34,10 +34,11 @@ export const FoodContext = createContext<FoodCalcs>({
     },
     setTimeHorizon: function (tH: { startDate: Dayjs; length: number; }): void {
         throw new Error("Function not implemented.");
-    }
+    },
+    user_uid: '',
 });
 
-export const FoodContextProvider = ({ children }: any) => {
+export const FoodContextProvider = ({ children, user }: any) => {
     const [timeHorizonFoods, setTimeHorizonFoods] = useState<any[][]>([]);
     const [timeHorizon, setTimeHorizon] = useState<{ startDate: Dayjs, length: number }>({ startDate: dayjs().set('hour', 0).set('minute', 0).set('second', 0), length: 1 });
     const [selectedNutrient, setSelectedNutrient] = useState<string | undefined>(undefined);
@@ -49,14 +50,18 @@ export const FoodContextProvider = ({ children }: any) => {
     const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(readableTimeHorizonFoods, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [readableTimeHorizonFoods, selectedFood, selectedFoodAmounts]); //may add other sort types ?
 
     useEffect(() => {
-        getFoodsInRange(timeHorizon.startDate, timeHorizon.length).then(result => {
+        getFoodsInRange(user.uid, timeHorizon.startDate, timeHorizon.length).then(result => {
             const res = result as { id: any, amount: number, unit: string, pk: string }[][];
             setTimeHorizonFoods(res as any[][]);
         });
     }, [timeHorizon]);
 
+    useEffect(() => {
+        console.log('user in FCP', user);
+    }, [user]);
+
     const addFoodToDay = async (day: Dayjs, id: any, amount: number, unit: string) => {
-        const uuid = await writeUserFood('anna', id, amount, unit, day);
+        const uuid = await writeUserFood(user.uid, id, amount, unit, day);
         const newFood = getNormalizedFood(id, amount, unit);
         const addedFoodItem = { ...newFood, pk: uuid }
         if (newFood === undefined) return;
@@ -71,7 +76,7 @@ export const FoodContextProvider = ({ children }: any) => {
             thFcopy[index] = newDay;
         })
         setTimeHorizonFoods(thFcopy);
-        deleteUserFood(`${pk}`);
+        deleteUserFood(user.uid, `${pk}`);
     };
 
     return (
@@ -91,6 +96,7 @@ export const FoodContextProvider = ({ children }: any) => {
                 todaysNutrients,
                 timeHorizon,
                 setTimeHorizon,
+                user_uid: user.uid
             }
         }>
             {children}

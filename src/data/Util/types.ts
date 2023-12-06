@@ -40,4 +40,5 @@ export interface FoodCalcs {
         startDate: Dayjs;
         length: number;
     }) => void,
+    user_uid: string,
 }

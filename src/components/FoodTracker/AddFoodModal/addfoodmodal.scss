@@ -26,6 +26,7 @@
         border-radius: 24px;
         padding: 24px;
         gap: 16px;
+        z-index: 2;
     }
 
     &-header {
@@ -34,6 +35,7 @@
         gap: 16px;
         align-items: center;
         justify-content: space-between;
+
         & .modal-title {
             gap: 16px;
             align-items: center;
@@ -50,11 +52,27 @@
         overflow-y: scroll;
     }
 
+    &-empty {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 70%;
+        padding: 15%;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        overflow-y: scroll;
+        text-align: center;
+    }
+
     &-add {
         display: flex;
         flex-direction: row;
         gap: 12px;
         width: 100%;
+        .add-food {
+            gap: 8px;
+        }
     }
 
     &-footer {
@@ -63,5 +81,50 @@
         gap: 12px;
         justify-content: flex-end;
         width: 100%;
+        align-items: center;
     }
+
+    &-datePicker {
+        width: 150px;
+
+        input {
+            font-family: 'Jost';
+            font-size: 16px;
+        }
+
+        .MuiInputBase-root {
+            background-color: $lightBlue;
+            box-sizing: inherit;
+            padding: 4px 12px;
+            border-radius: 12px !important;
+        }
+
+        .MuiInputAdornment-root {
+            height: 24px;
+            width: 24px;
+            margin: 0;
+            padding: 4px;
+            display: inline;
+
+            button {
+                padding: 0;
+                height: 16px;
+                width: 16px;
+                margin: 0px;
+
+                svg {
+                    height: 16px;
+                    width: 16px;
+                }
+            }
+        }
+    }
+}
+
+.MuiPickersDay-root.Mui-selected {
+    background-color: $pear !important;
+}
+
+.MuiPaper-rounded {
+    border-radius: 12px !important;
 }

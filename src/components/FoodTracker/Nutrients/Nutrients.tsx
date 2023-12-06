@@ -53,7 +53,6 @@ export const Nutrients: React.FC = () => {
                 </div>
             </div>
             {selectedFood !== undefined ? <div className="row add-food" key={selectedFood}>
-                <p>{foodName}</p>
                 <TextField
                     className="add-food-amount input-green"
                     value={amount}
@@ -75,6 +74,7 @@ export const Nutrients: React.FC = () => {
                     <MenuItem value={'serving'}>serving(s)</MenuItem>
                     <MenuItem value={'grams'}>grams</MenuItem>
                 </Select>
+                <p>{foodName}</p>
                 <button type="button" className="button-primary" onClick={() => { addFoodToDay(dayjs(), selectedFood, amount, unit); setSelectedFood(undefined) }}>Add</button>
             </div> :
                 <p className="augment">Select a food to see it's breakdown</p>

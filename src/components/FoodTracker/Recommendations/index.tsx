@@ -3,6 +3,7 @@ import { useContext, useMemo, useState } from 'react';
 import most from '../../../assets/Most.svg';
 import least from '../../../assets/Least.svg';
 import cancel from '../../../assets/Cancel.svg';
+import cancel_light from '../../../assets/CancelLight.svg';
 import search from '../../../assets/search.svg';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
@@ -11,6 +12,7 @@ import { FoodCard } from '../FoodCard';
 import { AddFoodModal } from '../AddFoodModal';
 import { NoResults } from './NoResults';
 import { FoodContext } from '../../../data/FoodContext';
+import { convertTimeHorizonLengthToSelectRelative } from '../../../data/Helpers/foodCalcHelpers';
 
 export const Recommendations: React.FC = () => {
 
@@ -24,10 +26,11 @@ export const Recommendations: React.FC = () => {
         recommendationType,
         setRecommendationType,
         recommendedFoods,
+        user_uid,
+        timeHorizon
     } = useContext(FoodContext);
 
     const [sortOrder, setSortOrder] = useState('Most');
-    const [recType, setRecType] = useState('calorie');
     const [isSearching, setIsSearching] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [openModal, setOpenModal] = useState(false);
@@ -69,70 +72,85 @@ export const Recommendations: React.FC = () => {
         return cards.slice().reverse();
     }, [recommendedFoods, selectedFood, sortOrder, searchText]);
 
+    const searchCancel = (
+        <button className="button-icon-small" onClick={() => setSearchText('')}>
+            <img src={cancel_light} alt="cancel" />
+        </button>
+    )
+
+    const searchBar = (<TextField
+        value={searchText}
+        InputProps={{
+            startAdornment: <img src={search} alt="search" />,
+            endAdornment: searchText !== '' && searchCancel,
+        }}
+        className="search-bar"
+        type="text"
+        // onBlur={() => { setIsSearching(false); setSearchText('') }}
+        id="outlined-basic"
+        variant="outlined"
+        placeholder='search'
+        autoFocus={true}
+        onChange={(e) => setSearchText(e.target.value)}
+    />);
+
+    const mostLeastSorter = (
+        <button type="button" className="button-secondary" onClick={() => setSortOrder(sortOrder === 'Most' ? 'Least' : 'Most')}>
+            {sortOrder}
+            <img src={sortOrder === 'Most' ? most : least} alt={sortOrder} />
+        </button>
+    )
+
+    const vitaminChip = (
+        <button type="button" className="button-decorative" onClick={() => setSelectedNutrient(undefined)}>
+            <p>{selectedNutrient}</p>
+            <img src={cancel} alt="cancel" />
+        </button>
+    )
+
+    const unitSelector = (
+        <Select
+            value={recommendationType}
+            onChange={(e) => setRecommendationType(e.target.value)}
+            displayEmpty
+            inputProps={{ 'aria-label': 'Without label' }}
+            autoWidth={true}
+        >
+            <MenuItem value={'calorie'}>calorie</MenuItem>
+            <MenuItem value={'serving'}>serving</MenuItem>
+            <MenuItem value={'gram'}>gram</MenuItem>
+        </Select>
+    )
+
     return (
         <div className="recommendations">
-            <div className='rec-header row'>
-                <div className='words row'>
-                    {!isSearching ?
-                        (<>
-                            <button type="button" className="button-icon" onClick={() => setIsSearching(true)}>
-                                <img src={search} alt="search" />
-                            </button>
-                            <h2>Top Recommendations</h2>
-                        </>)
-                        :
-                        (
-                            <TextField
-                                value={searchText}
-                                InputProps={{
-                                    startAdornment: <img src={search} alt="search" />,
-                                }}
-                                className="search-bar"
-                                type="text"
-                                // onBlur={() => { setIsSearching(false); setSearchText('') }}
-                                id="outlined-basic"
-                                variant="outlined"
-                                placeholder='search'
-                                autoFocus={true}
-                                onChange={(e) => setSearchText(e.target.value)}
-                            />
-                        )
+            <div className='rec-header col'>
+                <div className='rec-header-top row'>
+                    {selectedNutrient ? (
+                        <div className="rec-header-top-nutrients row">
+                            {mostLeastSorter}
+                            {vitaminChip}
+                        </div>
+                    ) : (
+                        <h2>Top Recommendations</h2>
+                    )
                     }
+                    {searchBar}
                 </div>
-
-                {!isSearching ? (<div className='display-settings row'>
-                    For:
-                    {selectedNutrient ?
-                        <>
-                            <button type="button" className="button-secondary" onClick={() => setSortOrder(sortOrder === 'Most' ? 'Least' : 'Most')}>
-                                {sortOrder}
-                                <img src={sortOrder === 'Most' ? most : least} alt={sortOrder} />
-                            </button>
-                            <button type="button" className="button-decorative" onClick={() => setSelectedNutrient(undefined)}>
-                                <p>{selectedNutrient}</p>
-                                <img src={cancel} alt="cancel" />
-                            </button>
-                        </> : 'today'
-                    }
-                    per
-                    <Select
-                        value={recommendationType}
-                        onChange={(e) => setRecommendationType(e.target.value)}
-                        displayEmpty
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        <MenuItem value={'calorie'}>calorie</MenuItem>
-                        <MenuItem value={'serving'}>serving</MenuItem>
-                        <MenuItem value={'gram'}>gram</MenuItem>
-                    </Select>
-                </div>) :
-                    (<p>{displayedFoods.length} results</p>)}
-
+                <div className='rec-header-bottom row'>
+                    <div className='rec-header-bottom-info row'>
+                        per
+                        {unitSelector}
+                        For:
+                        {convertTimeHorizonLengthToSelectRelative(timeHorizon.length)}
+                    </div>
+                    <p>{displayedFoods.length} results</p>
+                </div>
             </div>
+
             {displayedFoods.length > 0 ? (
                 <div className='card-row row'>
                     {displayedFoods}
-                    {/* {sortOrder === "Most" ? displayedFoods : displayedFoods.reverse()} */}
                 </div>
             ) : <NoResults />}
 
@@ -140,7 +158,9 @@ export const Recommendations: React.FC = () => {
                 foodToAdd={modalFoodToAdd}
                 deleteFood={removeFoodFromToday}
                 addFoodToDay={addFoodToDay}
-                closeModal={() => setOpenModal(false)} />
+                closeModal={() => setOpenModal(false)}
+                user_uid={user_uid}
+            />
             }
         </div>
     );

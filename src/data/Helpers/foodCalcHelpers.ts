@@ -224,3 +224,15 @@ const calculateRecommendedScore = (todaysPercents: DailyNutrientPercent[], foodI
     });
     return score;
 }
+
+export const convertTimeHorizonLengthToSelect = (length: number) => {
+    if (length === 1) return 'day'
+    if (length === 7) return 'week'
+    return 'month';
+  }
+
+  export const convertTimeHorizonLengthToSelectRelative = (length: number) => {
+    if (length === 1) return 'Today'
+    if (length === 7) return 'This Week'
+    return 'This Month';
+  }

@@ -2,7 +2,12 @@
     padding-top: 24px;
     padding-left: 24px;
     padding-right: 24px;
+    justify-content: space-between;
     img {
         height: 32px;
+    }
+    .row {
+        align-items: center;
+        gap: 16px;
     }
 }

@@ -8,13 +8,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import { getFoodsInRange } from '../../../data/Util/firebase';
+import { getFoodsInRange } from '../../../data/Util/firebaseFirestore';
 
 interface AddFoodModalProps {
     foodToAdd: any,
     deleteFood: (pk: number) => void,
     addFoodToDay: (day: Dayjs, id: string, amount: number, unit: string) => void,
     closeModal: () => void,
+    user_uid: string,
 }
 
 export const AddFoodModal: React.FC<AddFoodModalProps> = ({
@@ -22,6 +23,7 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
     foodToAdd,
     closeModal,
     addFoodToDay,
+    user_uid,
 }: AddFoodModalProps) => {
     const [addingAmount, setAddingAmount] = useState(foodToAdd.amount);
     const [addingUnit, setAddingUnit] = useState(foodToAdd.unit);
@@ -36,7 +38,7 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
     useEffect(() => {
         (async () => {
             if (value) {
-                const ret = await getFoodsInRange(value, 1);
+                const ret = await getFoodsInRange(user_uid, value, 1);
                 setInitialItems(ret[0]);
                 setRenderedItems(ret[0]);
             }
@@ -90,25 +92,32 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                         <h2>Editing</h2>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                label="Basic date picker"
+                                className="modal-datePicker"
                                 value={value}
                                 onChange={(newValue) => setValue(newValue)}
                             />
                         </LocalizationProvider>
                     </div>
-                    <button onClick={() => closeModal()}><img src={Cancel} /></button>
+                    <button className="button-icon" onClick={() => closeModal()}><img src={Cancel} /></button>
                 </div>
-                <div className="modal-chips">
-                    {renderedItems && renderedItems.map((item) => <FoodChip
-                        key={item.pk}
-                        id={item.id}
-                        unit={item.unit}
-                        amount={item.amount}
-                        style={'beige'}
-                        onDelete={() => removeItem(item.pk)}
-                    />
-                    )}
-                </div>
+
+                {renderedItems && renderedItems.length > 0 ?
+                    (<div className="modal-chips">
+                        {renderedItems.map((item) => <FoodChip
+                            key={item.pk}
+                            id={item.id}
+                            unit={item.unit}
+                            amount={item.amount}
+                            style={'beige'}
+                            onDelete={() => removeItem(item.pk)}
+                        />)}
+                    </div>) :
+                    (<p className="modal-empty">
+                        Looks like there haven't been any foods logged yet for this day.
+                    </p>)
+                }
+
+
                 <div className="modal-add">
                     <div className="row add-food" key={foodToAdd.id}>
                         <TextField
@@ -143,14 +152,10 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <button onClick={() => closeModal()}>Cancel</button>
-                    <button onClick={() => saveItems()}>Save</button>
+                    <button className="button-text" onClick={() => closeModal()}>Cancel</button>
+                    <button className="button-decorative" onClick={() => saveItems()}>Save</button>
                 </div>
             </div>
         </div>
     );
 };
-
-function uuidv4() {
-    throw new Error('Function not implemented.');
-}

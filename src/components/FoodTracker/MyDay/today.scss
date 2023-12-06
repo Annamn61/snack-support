@@ -66,15 +66,28 @@
                     border-radius: 16px;
                     text-align: center;
                     vertical-align: center;
+                    font-weight: 600;
                     &.isToday {
                         background-color: $pear;
                     }
                 }
-
                 &:hover {
                     background-color: white;
                     cursor: pointer;
                 }
+                &-grey {
+                    p {
+                        font-weight: 500;
+                        opacity: 0.5;
+                    }
+                    .dot {
+                        opacity: 0.4;
+                    }
+                    &:hover {
+                        background-color: rgba(255, 255, 255, 0.6);
+                    }
+                }
+
             }
 
             &:last-child {

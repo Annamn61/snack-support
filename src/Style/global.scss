@@ -33,9 +33,12 @@ p {
     }
 
     &.search-bar {
-        min-width: 120px;
+        width: 200px;
         height: 28px;
         margin: 0px;
+        .button-icon-small {
+            margin-right: -8px;
+        }
     }
     
     &.input-green {
@@ -67,12 +70,8 @@ p {
 }
 
 .MuiSelect-select {
-    padding: 0px !important;
-    min-width: 100px !important;
-    svg {
-        padding-left: 8px !important;
-        position: relative;
-    }
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
 }
 
 .icon {

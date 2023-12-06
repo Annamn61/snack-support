@@ -1,0 +1,70 @@
+@import "../../Style/constants.scss";
+
+.login {
+    height: calc(100vh - 128px);
+    width: calc(100vw - 128px);
+    padding: 64px;
+    &-logo {
+        position: absolute;
+        top: 16px;
+        left: 64px;
+        height: 32px;
+    }
+    &-container {
+        border: 3px solid $green;
+        border-radius: 24px;
+        height: calc(100% - 192px);
+        width: calc(100% - 192px);
+        padding: 96px;
+        background-color: white;
+        justify-content: flex-end;
+        & > div {
+            width: 50%;
+        }
+        &-logo {
+            justify-content: center;
+            align-items: center;
+            height: 90%;
+            img {
+                width: 320px;
+                height: 320px;
+            }
+        }
+    }
+    &-functions {
+        width: 300px;
+        height: 100%;
+        margin: auto;
+        justify-content: space-between;
+        &-fields {
+            gap: 16px;
+            .row {
+                align-items: center;
+                gap: 16px;
+                justify-content: center;
+            }
+            &-line {
+                height: 1px;
+                background-color: $pear;
+                width: 30%;
+            }
+        }
+        .switch-login {
+            gap: 4px;
+            justify-content: center;
+        }
+    }
+    .lowercase {
+        text-transform: none;
+    }
+}
+
+.login-field {
+    .MuiInputBase-root {
+        border-radius: 12px !important;
+        input {
+            padding: 4px 12px;
+        }
+        outline: 2px solid $pear;
+    }
+}

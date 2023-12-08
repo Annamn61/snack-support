@@ -13,7 +13,7 @@ export interface DailyNutrientPercent {
 
 export interface FoodCalcs {
     timeHorizonFoods: any[][];
-    addFoodToDay: (day: Dayjs, id: any, amount: number, unit: string) => void;
+    addFoodToDay: (id: any, amount: number, unit: string) => void;
     removeFoodFromToday?: any, // FIX THIS
     selectedNutrient: string | undefined,
     setSelectedNutrient: (nutrient: string | undefined) => void;

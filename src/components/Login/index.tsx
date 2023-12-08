@@ -18,7 +18,6 @@ export const Login: React.FC = () => {
     const submit = () => {
         if (signingUp) {
             if (password === confirm) {
-                console.log('creating user');
                 createUser(username, password);
             } else {
                 setError({ field: 'password2', message: 'Passwords do not match' })

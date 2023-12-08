@@ -34,7 +34,7 @@ export const Recommendations: React.FC = () => {
     const [isSearching, setIsSearching] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [openModal, setOpenModal] = useState(false);
-    const [modalFoodToAdd, setModalFoodToAdd] = useState(undefined);
+    const [modalFoodToAdd, setModalFoodToAdd] = useState<any>(undefined);
 
     const matchesSearch = (food: any) => {
         if (food.item.name.toLowerCase().includes(searchText.toLowerCase())) {
@@ -52,6 +52,12 @@ export const Recommendations: React.FC = () => {
     const displayedFoods = useMemo(() => {
         const filteredFoods = recommendedFoods.filter((food) => matchesSearch(food))
         const cards = filteredFoods.map((rec, index) => {
+            const modalFoodToAdd = ({
+                unit: recommendationType === 'serving' ? recommendationType : recommendationType + 's',
+                amount: rec.item.amount,
+                name: rec.item.name,
+                id: rec.item.id
+            })
             return (<FoodCard
                 id={rec.item.id}
                 key={'foodCard_' + index}
@@ -63,7 +69,7 @@ export const Recommendations: React.FC = () => {
                 unit={rec.item.unit}
                 percent={(selectedNutrient !== undefined && rec.percent !== undefined) && Math.round(rec.percent * 100) / 100}
                 onClick={selectedFood === rec.item.id ? () => setSelectedFood(undefined) : () => setSelectedFood(rec.item.id)}
-                onAdd={() => { setOpenModal(true); setModalFoodToAdd(rec.item) }}
+                onAdd={() => { setOpenModal(true); setModalFoodToAdd(modalFoodToAdd) }}
             />)
         })
         if (sortOrder === "Most") {
@@ -141,8 +147,8 @@ export const Recommendations: React.FC = () => {
                     <div className='rec-header-bottom-info row'>
                         per
                         {unitSelector}
-                        For:
-                        {convertTimeHorizonLengthToSelectRelative(timeHorizon.length)}
+                        {/* For:
+                        {convertTimeHorizonLengthToSelectRelative(timeHorizon.length)} */}
                     </div>
                     <p>{displayedFoods.length} results</p>
                 </div>
@@ -156,10 +162,7 @@ export const Recommendations: React.FC = () => {
 
             {openModal && <AddFoodModal
                 foodToAdd={modalFoodToAdd}
-                deleteFood={removeFoodFromToday}
-                addFoodToDay={addFoodToDay}
                 closeModal={() => setOpenModal(false)}
-                user_uid={user_uid}
             />
             }
         </div>

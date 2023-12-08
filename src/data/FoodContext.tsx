@@ -8,7 +8,7 @@ import { FoodCalcs } from "./Util/types";
 
 export const FoodContext = createContext<FoodCalcs>({
     timeHorizonFoods: [],
-    addFoodToDay: function (day: Dayjs, id: any, amount: number, unit: string): void {
+    addFoodToDay: function (id: any, amount: number, unit: string): void {
         throw new Error("Function not implemented.");
     },
     selectedNutrient: undefined,
@@ -56,12 +56,8 @@ export const FoodContextProvider = ({ children, user }: any) => {
         });
     }, [timeHorizon]);
 
-    useEffect(() => {
-        console.log('user in FCP', user);
-    }, [user]);
-
-    const addFoodToDay = async (day: Dayjs, id: any, amount: number, unit: string) => {
-        const uuid = await writeUserFood(user.uid, id, amount, unit, day);
+    const addFoodToDay = async (id: any, amount: number, unit: string) => {
+        const uuid = await writeUserFood(user.uid, id, amount, unit);
         const newFood = getNormalizedFood(id, amount, unit);
         const addedFoodItem = { ...newFood, pk: uuid }
         if (newFood === undefined) return;

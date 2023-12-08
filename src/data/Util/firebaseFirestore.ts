@@ -1,14 +1,18 @@
-import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, doc, writeBatch } from "firebase/firestore";
 import { getFirestore, query, where } from "firebase/firestore";
 import dayjs, { Dayjs } from "dayjs";
 import { firebaseApp } from "./firebaseInit";
 
 const db = getFirestore(firebaseApp);
 
-export async function writeUserFood(name: string, id: number, amount: number, unit: string, day: Dayjs) {
+interface addFoodType {
+  id: number, amount: number, unit: string
+}
+
+export async function writeUserFood(name: string, id: number, amount: number, unit: string) {
   const result = await addDoc(collection(db, 'users/' + name + '/foods'), {
     id,
-    addedDate: day.valueOf(),
+    addedDate: dayjs().valueOf(),
     amount,
     unit,
   });
@@ -17,6 +21,32 @@ export async function writeUserFood(name: string, id: number, amount: number, un
 
 export async function deleteUserFood(user_uid: string, uuid: string) {
   const result = await deleteDoc(doc(db, 'users/' + user_uid + '/foods', uuid));
+}
+
+export async function addAndDeleteFoods(user_uid: string, addedFoods: addFoodType[], removedFoods: string[]) {
+
+  console.log('Foods to add', addedFoods);
+  console.log('Foods to remove', removedFoods);
+
+  // Get a new write batch
+  const batch = writeBatch(db);
+
+  addedFoods.forEach(food => {
+    const newFoodRef = doc(collection(db, 'users/' + user_uid + '/foods'))
+    const newFoodItem = {
+      id: food.id,
+      addedDate: dayjs().valueOf(),
+      amount: food.amount,
+      unit: food.unit,
+    }
+    batch.set(newFoodRef, newFoodItem);
+  });
+
+  removedFoods.forEach(foodId => {
+    batch.delete(doc(db, 'users/' + user_uid + '/foods', foodId))
+  })
+
+  await batch.commit();
 }
 
 const sortFoodsIntoDays = (startTime: number, numberOfDays: number, foods: any[]) => {
@@ -45,7 +75,7 @@ export const getFoodsInRange = async (user_uid: string, startDate: Dayjs, number
   });
 
   return sortFoodsIntoDays(midnightStart.valueOf(), numberOfDays, foodsList);;
-} 
+}
 
 export async function getUserFoods(user_uid: string, from: number) {
   let queryFrom = new Date();

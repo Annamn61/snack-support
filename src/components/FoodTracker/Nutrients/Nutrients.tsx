@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { getFoodById } from "../../../data/Helpers/foodCalcHelpers";
-import dayjs, { Dayjs } from "dayjs";
 import { FoodContext } from "../../../data/FoodContext";
 
 export const Nutrients: React.FC = () => {
@@ -75,7 +74,7 @@ export const Nutrients: React.FC = () => {
                     <MenuItem value={'grams'}>grams</MenuItem>
                 </Select>
                 <p>{foodName}</p>
-                <button type="button" className="button-primary" onClick={() => { addFoodToDay(dayjs(), selectedFood, amount, unit); setSelectedFood(undefined) }}>Add</button>
+                <button type="button" className="button-primary" onClick={() => { addFoodToDay(selectedFood, amount, unit); setSelectedFood(undefined) }}>Add</button>
             </div> :
                 <p className="augment">Select a food to see it's breakdown</p>
             }

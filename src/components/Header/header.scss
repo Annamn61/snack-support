@@ -3,11 +3,29 @@
     padding-left: 24px;
     padding-right: 24px;
     justify-content: space-between;
-    img {
+    & a > img {
         height: 32px;
     }
-    .row {
+    & > .row {
         align-items: center;
         gap: 16px;
     }
+}
+
+.timeHorizon {
+    &-container {
+        height: 32px;
+        align-items: center;
+        gap: 16px;
+
+    }
+    &-month {
+        gap: 8px;
+        width: 100px;
+        justify-content: center;
+        p {
+            font-size: 16px;
+            // font-family: 'Kiwi Maru', serif;
+        }
+    }   
 }

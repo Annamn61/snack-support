@@ -177,6 +177,33 @@ export const getReadableTimeHorizonFoods = (tHF: any[][]) => {
     return foodsToSet;
 }
 
+export const getFoodNamesAndIds = () => {
+    return baseFoods.map((food) => {
+        return {
+            name: food.name,
+            id: food.id,
+        }
+    })
+}
+
+export const getFoodNames = () => {
+    return baseFoods.map((food) => food.name);
+}
+
+export const getIdFromName = (name: string | null) => {
+    if(!name) return null;
+    console.log('name', name);
+    let foundId = null;
+    baseFoods.forEach(food => {
+        if(food.name === name) {
+            foundId = food.id;
+            return;
+        }
+    })
+    return foundId;
+}
+
+
 // looks at todays food items, returns all nutrients or vitamin by selected unit type
 // returns recommended foods (name, image, percent, amount, units) sorted by ranking
 export const getRecommendedFoods = (timeHorizonFoods: any[], selectedNutrient: string | undefined, type: string) => {

@@ -11,17 +11,12 @@ export const MyDay: React.FC = () => {
         timeHorizonFoods,
         removeFoodFromToday,
         timeHorizon,
-        setTimeHorizon
     } = useContext(FoodContext);
-
-    const [monthsBack, setMonthsBack] = useState(0);
 
     return (
         <div className="today col">
             <div className='today-header row'>
                 <h2>My Day</h2>
-                <button onClick={() => setMonthsBack(monthsBack + 1)}>'B'</button>
-                <button onClick={() => setMonthsBack(Math.max(monthsBack - 1, 0))}>'F'</button>
             </div>
             {convertTimeHorizonLengthToSelect(timeHorizon.length) === 'day' ? <div className='chips-col col'>
                 {timeHorizonFoods && timeHorizonFoods.length > 0 && timeHorizonFoods[0].map((item, index) => {
@@ -39,9 +34,6 @@ export const MyDay: React.FC = () => {
                 })}
             </div> :
                 <Calendar
-                    monthsBack={monthsBack}
-                    setTimeHorizon={setTimeHorizon}
-                    timeHorizon={timeHorizon}
                     foods={timeHorizonFoods}
                 />
             }

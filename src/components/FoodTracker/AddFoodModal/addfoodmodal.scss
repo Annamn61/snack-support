@@ -72,6 +72,58 @@
         width: 100%;
         .add-food {
             gap: 8px;
+            button {
+                width: 32px;
+                height: 32px;
+                padding: 0;
+                border-radius: 24px;
+            }
+            input {
+               font-family: 'Jost';
+            }
+            &-amount {
+                display: inline-block;
+                height: 32px;
+                .MuiInputBase-root {
+                    height: 32px;
+                }
+                &.MuiTextField-root {
+                    
+                    input {
+                        padding-left: 8px !important;
+                        padding-right: 8px !important;
+                        width: 52px
+                    }
+                }
+            }
+            &-unit {
+                &.MuiInputBase-root {
+                    height: 32px !important;
+                }
+                .MuiSelect-outlined {
+                    padding-left: 8px !important;
+                    padding-right: 24px !important;
+                }
+                svg {
+                    margin-right: -6px;
+                }
+            }
+            .MuiAutocomplete-root {
+                width: 120px;
+                svg {
+                    display: none;
+                }
+                input {
+                    border: 2px solid #84A28F;
+                    border-radius: 12px !important;
+                    height: 14px;
+                }
+            }
+            .MuiInputBase-root {
+                padding: 0px !important;
+                font-family: 'Jost';
+                border-radius: 12px !important;
+            }
         }
     }
 
@@ -82,10 +134,13 @@
         justify-content: flex-end;
         width: 100%;
         align-items: center;
+        button {
+            height: 32px;
+        }
     }
 
     &-datePicker {
-        width: 150px;
+        width: 140px;
 
         input {
             font-family: 'Jost';
@@ -95,7 +150,7 @@
         .MuiInputBase-root {
             background-color: $lightBlue;
             box-sizing: inherit;
-            padding: 4px 12px;
+            padding: 0px 8px;
             border-radius: 12px !important;
         }
 

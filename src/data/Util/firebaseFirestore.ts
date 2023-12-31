@@ -9,10 +9,10 @@ interface addFoodType {
   id: number, amount: number, unit: string
 }
 
-export async function writeUserFood(name: string, id: number, amount: number, unit: string) {
+export async function writeUserFood(name: string, id: number, amount: number, unit: string, day: Dayjs) {
   const result = await addDoc(collection(db, 'users/' + name + '/foods'), {
     id,
-    addedDate: dayjs().valueOf(),
+    addedDate: day.valueOf(),
     amount,
     unit,
   });
@@ -24,9 +24,6 @@ export async function deleteUserFood(user_uid: string, uuid: string) {
 }
 
 export async function addAndDeleteFoods(user_uid: string, addedFoods: addFoodType[], removedFoods: string[]) {
-
-  console.log('Foods to add', addedFoods);
-  console.log('Foods to remove', removedFoods);
 
   // Get a new write batch
   const batch = writeBatch(db);

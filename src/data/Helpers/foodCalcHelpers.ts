@@ -3,18 +3,6 @@ import { baseFoods } from "../BaseFoods/_BaseIndex";
 import { DRIs } from "../Util/DRIs";
 import { DailyNutrientPercent } from "../Util/types";
 
-// export const sortRankings = (a: {
-//     name: string,
-//     image: string,
-//     percent: number,
-// }, b: {
-//     name: string,
-//     image: string,
-//     percent: number,
-// }) => {
-//     return b.percent - a.percent
-// }
-
 export const normalizeFoodsByCalories = (calories: number) => {
     return baseFoods.map((food) => {
         return getNormalizedFood(food.id, calories, 'calories');
@@ -192,7 +180,6 @@ export const getFoodNames = () => {
 
 export const getIdFromName = (name: string | null) => {
     if(!name) return null;
-    console.log('name', name);
     let foundId = null;
     baseFoods.forEach(food => {
         if(food.name === name) {

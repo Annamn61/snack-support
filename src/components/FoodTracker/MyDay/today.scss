@@ -12,6 +12,15 @@
         padding: 24px 36px 0px 36px;
     }
 
+    .no-foods {
+        width: calc(100% - 72px);
+        height: calc(70% - 72px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 36px;
+    }
+
     .addfood {
         gap: 12px;
         width: 100%;
@@ -88,6 +97,32 @@
                     }
                 }
 
+            }
+
+            .day, .day-grey {
+                position: relative;
+                &-add {
+                    position: absolute;
+                    bottom: 4px;
+                    right: 4px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 16px;
+                    border: none;
+                    background-color: transparent;
+                    padding: 0px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    display: none;
+                    &:hover {
+                        background-color: $lightBlue;
+                    }
+                }
+                &:hover .day-add {
+                    display: block;
+                }
             }
 
             &:last-child {

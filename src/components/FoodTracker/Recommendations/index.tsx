@@ -40,10 +40,10 @@ export const Recommendations: React.FC = () => {
         if (food.item.name.toLowerCase().includes(searchText.toLowerCase())) {
             return true;
         }
-        if (food.item.aisle.toLowerCase().includes(searchText.toLowerCase())) {
+        if (food.item.aisle?.toLowerCase().includes(searchText.toLowerCase())) {
             return true;
         }
-        if (food.item.image.toLowerCase().includes(searchText.toLowerCase())) {
+        if (food.item.image?.toLowerCase().includes(searchText.toLowerCase())) {
             return true;
         }
         return food.item.categoryPath.map((category: string) => category.toLowerCase().includes(searchText.toLowerCase())).includes(true);

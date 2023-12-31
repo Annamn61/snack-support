@@ -39,13 +39,16 @@ export const Calendar: React.FC<CalendarProps> = ({
                             <div
                                 key={totalIndex}
                                 className={`day ${greyed ? 'day-grey' : ''}`}
-                                onClick={() => setTimeHorizon({ startDate: fullDay.set('hour', 0).set('minute', 0).set('second', 0), length: 1 })}
+                                onClick={() => {
+                                    console.log('on click date');
+                                    setTimeHorizon({ startDate: fullDay.set('hour', 0).set('minute', 0).set('second', 0), length: 1 })
+                                }}
                             >
                                 <p className={isToday ? 'isToday' : ''}>
                                     {fullDay.date()}
                                 </p>
                                 <Dots dotKey={`day-${dayIndex}`} foodList={foods[totalIndex]} />
-                                <button className="foodcard-add" onClick={(e) => { setOpenModalDate(fullDay); e.stopPropagation() }}>+</button>
+                                <button className="day-add" onClick={(e) => { setOpenModalDate(fullDay); e.stopPropagation() }}>+</button>
                             </div>
                         )
                     })}

@@ -51,7 +51,7 @@ export const Nutrients: React.FC = () => {
                     {null}
                 </div>
             </div>
-            {selectedFood !== undefined ? <div className="row add-food" key={selectedFood}>
+            {selectedFood !== undefined && timeHorizon.length === 1 ? <div className="row add-food" key={selectedFood}>
                 <TextField
                     className="add-food-amount input-green"
                     value={amount}

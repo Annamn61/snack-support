@@ -9,7 +9,7 @@ export const Login: React.FC = () => {
 
     const [signingUp, setSigningUp] = useState(false);
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirmPass] = useState('');
 
@@ -18,26 +18,26 @@ export const Login: React.FC = () => {
     const submit = () => {
         if (signingUp) {
             if (password === confirm) {
-                createUser(username, password);
+                createUser(email, password).then(ret => setError(ret));
             } else {
                 setError({ field: 'password2', message: 'Passwords do not match' })
             }
         } else {
-            loginEmailPassword(username, password).then(ret => setError(ret));
+            loginEmailPassword(email, password).then(ret => setError(ret));
         }
     }
 
-    const usernameField = (
+    const emailField = (
         <TextField
             className="login-field"
-            value={username}
+            value={email}
             type="text"
             variant="outlined"
-            placeholder='Username'
+            placeholder='Email'
             autoFocus={true}
-            error={error && (error.field === 'username')}
-            helperText={error && (error.field === 'username') && error.message}
-            onChange={(e) => setUsername(e.target.value)}
+            error={error && (error.field === 'email')}
+            // helperText={error && (error.field === 'email') && error.message}
+            onChange={(e) => setEmail(e.target.value)}
         />
     );
 
@@ -49,7 +49,7 @@ export const Login: React.FC = () => {
             variant="outlined"
             placeholder='Password'
             error={error && (error.field === 'password')}
-            helperText={error && (error.field === 'password') && error.message}
+            // helperText={error && (error.field === 'password') && error.message}
             autoFocus={true}
             onChange={(e) => setPassword(e.target.value)}
         />
@@ -61,17 +61,18 @@ export const Login: React.FC = () => {
             value={confirm}
             type="password"
             variant="outlined"
-            placeholder='Password'
+            placeholder='Confirm Password'
             autoFocus={true}
+            autoComplete="off"
             error={error && (error.field === 'password2')}
-            helperText={error && (error.field === 'password2') && error.message}
+            // helperText={error && (error.field === 'password2') && error.message}
             onChange={(e) => setConfirmPass(e.target.value)}
         />
     );
 
     const actionButton = (
         <button
-            disabled={!username || !password}
+            disabled={!email || !password}
             className="button-decorative large"
             onClick={submit}
         >
@@ -114,6 +115,12 @@ export const Login: React.FC = () => {
         );
     }
 
+    const errorMessage = (
+        <div className="error-message">
+            <p>{error?.message}</p>
+        </div>
+    );
+
     return (
         <div className="login">
             <img className="login-logo" src={logo} alt="food finder logo" />
@@ -125,9 +132,10 @@ export const Login: React.FC = () => {
                     <div className="login-functions col">
                         <div className="login-functions-fields col">
                             {welcomeText()}
-                            {usernameField}
+                            {emailField}
                             {passwordField}
                             {signingUp && confirmPasswordField}
+                            {errorMessage}
                             {actionButton}
                             <div className="row">
                                 <div className="login-functions-fields-line" />

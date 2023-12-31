@@ -5,7 +5,7 @@ import { FoodContext } from '../../data/FoodContext';
 
 export const DataPage: React.FC = () => {
 
-    const { addFoodToDay, timeHorizonFoods } = useContext(FoodContext);
+    const { addFoodToDay, timeHorizonFoods, timeHorizon } = useContext(FoodContext);
 
     useEffect(() => {
         addFoodToDay(11090, 1, 'serving');

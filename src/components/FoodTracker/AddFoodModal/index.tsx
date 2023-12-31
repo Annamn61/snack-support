@@ -72,7 +72,6 @@ export const AddFoodModal: React.FC<AddFoodModalProps> = ({
             unit,
             amount,
         }
-        console.log('adding new item', newItem.pk);
         const newRendered = [...renderedItems];
         newRendered.push(newItem);
         setRenderedItems(newRendered);

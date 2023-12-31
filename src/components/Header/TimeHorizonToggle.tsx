@@ -6,10 +6,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import arrowLeft from '../../assets/ArrowLeft.svg'
 import arrowRight from '../../assets/ArrowRight.svg'
-// import { FoodChip } from '../FoodChip/foodchip';
-// import { Calendar } from './Calendar';
-// import { FoodContext } from '../../../data/FoodContext';
-// import { convertTimeHorizonLengthToSelect } from '../../../data/Helpers/foodCalcHelpers';
+import goToDay from '../../assets/GoToDay.svg'
 
 export const TimeHorizonToggle: React.FC = () => {
 
@@ -21,6 +18,7 @@ export const TimeHorizonToggle: React.FC = () => {
     } = useContext(FoodContext);
 
     const updateTimeHorizon = (value: 'week' | 'day' | 'month') => {
+        console.log('updating time horizon');
         let day = dayjs();
         let length = 1;
         if (value === 'week') {
@@ -44,6 +42,8 @@ export const TimeHorizonToggle: React.FC = () => {
     const [monthsBack, setMonthsBack] = useState(0);
 
     useEffect(() => {
+        if(timeHorizon.length === 1) return;
+        console.log('months back changed');
         const currentDate = dayjs().subtract(monthsBack, 'month');
         const firstWeekday = currentDate.startOf("month").day();
         const daysInMonth = currentDate.daysInMonth();
@@ -53,6 +53,7 @@ export const TimeHorizonToggle: React.FC = () => {
     }, [monthsBack])
 
     const setToToday = () => {
+        console.log('setting to today');
         if (timeHorizon.length === 1) {
             setTimeHorizon({ startDate: dayjs().set('hour', 0).set('minute', 0).set('second', 0), length: 1 });
         } else {
@@ -61,6 +62,7 @@ export const TimeHorizonToggle: React.FC = () => {
     }
 
     const setTimeHorizonDate = (date: Dayjs | null) => {
+        console.log('setting date');
         const dateToSet = date ? date : dayjs();
         setTimeHorizon({ startDate: dateToSet.set('hour', 0).set('minute', 0).set('second', 0), length: 1 });
     }
@@ -90,7 +92,9 @@ export const TimeHorizonToggle: React.FC = () => {
                     </button>
                 </>
             )}
-            <button className="button-icon" onClick={setToToday}>#</button>
+            <button className="button-icon" onClick={setToToday}>
+                <img src={goToDay} />
+            </button>
 
             <Select
                 className="add-food-unit select-green"

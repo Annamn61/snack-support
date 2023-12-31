@@ -48,6 +48,9 @@
                 background-color: $pear;
                 width: 30%;
             }
+            .error-message p {
+                color: $error;
+            }
         }
         .switch-login {
             gap: 4px;
@@ -66,5 +69,8 @@
             padding: 4px 12px;
         }
         outline: 2px solid $pear;
+        &.Mui-error {
+            outline: 2px solid $error;
+        }
     }
 }

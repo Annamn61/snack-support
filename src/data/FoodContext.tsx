@@ -45,24 +45,31 @@ export const FoodContextProvider = ({ children, user }: any) => {
     const [selectedFood, setSelectedFood] = useState<number | undefined>(undefined);
     const [selectedFoodAmounts, setSelectedFoodAmounts] = useState<{ amount: number, unit: string }>({ amount: 1, unit: 'serving' });
     const [recommendationType, setRecommendationType] = useState('serving');
+    const [dataUpdate, setDataUpdate] = useState(false);
     const readableTimeHorizonFoods = useMemo(() => getReadableTimeHorizonFoods(timeHorizonFoods), [timeHorizonFoods]);
     const recommendedFoods = useMemo(() => getRecommendedFoods(readableTimeHorizonFoods, selectedNutrient, recommendationType), [readableTimeHorizonFoods, selectedNutrient, recommendationType]);
     const todaysNutrients = useMemo(() => getTotalPercentDVWithSelectedFood(readableTimeHorizonFoods, selectedFoodAmounts, selectedFood).sort(sortPercentDV), [readableTimeHorizonFoods, selectedFood, selectedFoodAmounts]); //may add other sort types ?
 
+
+    useEffect(() => {
+        console.log(timeHorizon.length);
+    }, [timeHorizon]);
+
     useEffect(() => {
         getFoodsInRange(user.uid, timeHorizon.startDate, timeHorizon.length).then(result => {
             const res = result as { id: any, amount: number, unit: string, pk: string }[][];
-            setTimeHorizonFoods(res as any[][]);
+            if (res.length === 1 && res[0].length === 0) {
+                setTimeHorizonFoods([]);
+            } else {
+                setTimeHorizonFoods(res as any[][]);
+            }
         });
-    }, [timeHorizon]);
+        setDataUpdate(false);
+    }, [timeHorizon, dataUpdate]);
 
     const addFoodToDay = async (id: any, amount: number, unit: string) => {
-        const uuid = await writeUserFood(user.uid, id, amount, unit);
-        const newFood = getNormalizedFood(id, amount, unit);
-        const addedFoodItem = { ...newFood, pk: uuid }
-        if (newFood === undefined) return;
-        // only add to THF if the day is within the time Horizon
-        // setTimeHorizonFoods([addedFoodItem, ...timeHorizonFoods]);
+        const day = timeHorizon.startDate.add((timeHorizon.length - 1), 'day');
+        await writeUserFood(user.uid, id, amount, unit, day).then(() => setDataUpdate(true));
     }
 
     const removeFoodFromToday = (pk: number) => {

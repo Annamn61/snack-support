@@ -1,3 +1,5 @@
+# run with: python3 getBaseFoods.py from this directory
+
 # make an api call to get all the base foods
 # and save them to a text file
 
@@ -12,8 +14,8 @@ def getBaseFoods(foodsToGet):
     for food in foodsToGet:
         url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/" + str(food) +  "/information"
         headers = {
-            'X-RapidAPI-Key': '4533082377mshd77b2ed9a1f0af2p1420a5jsnb649f01d95e0', # TODO: pull from env file
-            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com' # TODO: pull from env file
+            'X-RapidAPI-Key': '',
+            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
         }
         params = {
             'amount': '150',
@@ -33,13 +35,8 @@ def getBaseFoods(foodsToGet):
             print('error!!!!', food, response.json())
         time.sleep(3)
 
-
-# for next time
-# 93730, 18033, 18044, 99156, 98871, 18971, 98895, 18029, 18060, 18027, 10118029, 18413, 18439, 93837
-
-
 if __name__ == "__main__":
-    foodsToGet = [93730, 18033, 18044, 99156, 98871, 18971, 98895, 18029, 18060, 18027, 10118029, 18413, 18439, 93837]
+    foodsToGet = []
     getBaseFoods(foodsToGet)
 
 

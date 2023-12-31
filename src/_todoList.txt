@@ -1,8 +1,0 @@
-1. Make the recommendation cards go white when clicked on
-2. Add the correct styling to the + of the side percents on today's nutrients
-*3. Clicking different calories grams servings changes what is showing up
-4. Show the percent under the cards if they have one when a vitamin is clicked on
-*5. Depending if its calories grams or servings, put that information in the subheader of the recommendations
-6. ERROR - when you switch grams -> calories -> servings etc, the selectedFood doesn't update to the new nutrient densities.
-7. ERROR - when a nutrient is almost full, the displayed percent is truncated to the remaining possible percent (cause it comes from the score);
-8. ERROR - copper, servings, selected crabmeat why is the crabmeat percent 81 but the percent added to the vitamin 86%? 

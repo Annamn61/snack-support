@@ -24,8 +24,8 @@ export const searchFoodItems = async (queryTerm: string) => {
             number: '10'
         },
         headers: {
-            'X-RapidAPI-Key': '4533082377mshd77b2ed9a1f0af2p1420a5jsnb649f01d95e0', //TODO: pull from env file
-            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com' //TODO: pull from env file
+            'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
         }
     };
 
@@ -48,8 +48,8 @@ export const getIngredient = async (queryTerm: string) => {
             unit: 'grams'
         },
         headers: {
-            'X-RapidAPI-Key': '4533082377mshd77b2ed9a1f0af2p1420a5jsnb649f01d95e0', //TODO: pull from env file
-            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com' //TODO: pull from env file
+            'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
         }
     };
 

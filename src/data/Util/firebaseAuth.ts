@@ -41,16 +41,44 @@ export const createUser = async (email: string, password: string) => {
 
 export const getErrorFieldAndMessage = (error: any) => {
     if (error.code == AuthErrorCodes.INVALID_PASSWORD) {
-        console.log('Invalid Password')
         return {
             field: 'password',
             message: 'Invalid Password'
         }
     }
-    console.log('message', error.message);
+    if (error.code == AuthErrorCodes.INVALID_EMAIL) {
+        return {
+            field: 'email',
+            message: 'Invalid Email'
+        }
+    }
+    if (error.code == AuthErrorCodes.EMAIL_EXISTS) {
+        return {
+            field: 'email',
+            message: 'Email already in use'
+        }
+    }
+    if (error.code == AuthErrorCodes.NETWORK_REQUEST_FAILED) {
+        return {
+            field: '',
+            message: 'Network error, try again later'
+        }
+    }
+    if (error.code == AuthErrorCodes.TOO_MANY_ATTEMPTS_TRY_LATER) {
+        return {
+            field: '',
+            message: 'Too many attempts, try again later'
+        }
+    }
+    if (error.code == AuthErrorCodes.WEAK_PASSWORD) {
+        return {
+            field: 'password',
+            message: 'Password is too weak'
+        }
+    }
     return {
         field: '',
-        message: 'Invalid Password'
+        message: error.message,
     }
 }
 

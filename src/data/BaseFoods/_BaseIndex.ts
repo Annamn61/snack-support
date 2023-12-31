@@ -187,6 +187,76 @@ import { pepper_jack_cheese } from './PepperJackCheese';
 import { peppers } from './Peppers';
 import { persimmons } from './Persimmons';
 import { pineapple_juice } from "./PineappleJuice";
+import { cherry } from "./Cherry";
+import { cherry_jam } from "./CherryJam";
+import { cherry_tomatoes } from "./CherryTomatoes";
+import { Chocolate_Easter_Eggs } from "./ChocolateEasterEggs";
+import { cooked_wide_egg_noodles } from "./CookedWideEggNoodles";
+import { dry_egg_whites } from "./DryEggWhites";
+import { duck_egg } from "./DuckEgg";
+import { egg_nog } from "./EggNog";
+import { eggroll_wrappers } from "./EggrollWrappers";
+import { eggs } from "./Eggs";
+import { egg_white } from "./EggWhite";
+import { green_mangos } from "./GreenMangos";
+import { hard_cooked_egg } from "./HardCookedEgg";
+import { italian_tomatoes } from "./ItalianTomatoes";
+import { jarred_sour_cherries } from "./JarredSourCherries";
+import { liquid_egg_substitute } from "./LiquidEggSubstitute";
+import { mangos } from "./Mangos";
+import { maraschino_cherry } from "./MaraschinoCherry";
+import { pistachio_oil } from "./PistachioOil";
+import { pita_bread } from "./PitaBread";
+import { plum_preserves } from "./PlumPreserves";
+import { plum_sauce } from "./PlumSauce";
+import { poached_eggs } from "./PoachedEggs";
+import { mango_sorbet } from "./MangoSorbet";
+import { mangosteen } from "./Mangosteen";
+import { rice_wine_vinegar } from "./RiceWineVinegar";
+import { rice_protein_powder } from "./RiceProteinPowder";
+import { rice_for_risotto } from "./RiceForRisotto";
+import { rice_drink } from "./RiceDrink";
+import { rice } from "./Rice";
+import { riced_cauliflower } from "./RicedCauliflower";
+import { reduced_fat_buttermilk } from "./ReducedFatButtermilk";
+import { red_plums } from "./RedPlums";
+import { rainier_cherries } from "./RainierCherries";
+import { rabbit_pieces } from "./RabbitPieces";
+import { quinoa } from "./Quinoa";
+import { quail_eggs } from "./QuailEggs";
+import { purple_plums } from "./PurplePlums";
+import { pure_vanilla_extract } from "./PureVanillaExtract";
+import { pumpernickel_bread } from "./PumpernickelBread";
+import { prune } from "./Prune";
+import { pretzel_bun } from "./PretzelBun";
+import { powdered_fruit_pectin } from "./PowderedFruitPectin";
+import { potato_bread } from "./PotatoBread";
+import { pomegranate_juice } from "./PomegranateJuice";
+import { roast_beef } from "./RoastBeef";
+import { rocket } from "./Rocket";
+import { rye_bread } from "./RyeBread";
+import { saffron_threads } from "./SaffronThreads";
+import { sage_leaves } from "./SageLeaves";
+import { salame } from "./Salame";
+import { salted_butter } from "./SaltedButter";
+import { sesame_seed } from "./SesameSeed";
+import { sesame_seed_burger_buns } from "./SesameSeedBurgerBuns";
+import { sesame_seed_oil } from "./SesameSeedOil";
+import { sesame_seed_paste } from "./SesameSeedPaste";
+import { shaoxing_wine } from "./ShaoxingWine";
+import { sherry_wine } from "./SherryWine";
+import { skirt_steak } from "./SkirtSteak";
+import { smoked_paprika } from "./SmokedPaprika";
+import { smooth_peanut_butter } from "./SmoothPeanutButter";
+import { sodium_bicarbonate } from "./SodiumBicarbonate";
+import { sour_dough_bread } from "./SourDoughBread";
+import { soured_cream } from "./SouredCream";
+import { soy_milk } from "./SoyMilk";
+import { spring_roll_wrapper } from "./SpringRollWrapper";
+import { sprouted_grain_bread } from "./SproutedGrainBread";
+import { star_fruit } from "./StarFruit";
+import { sticky_rice } from "./StickyRice";
+import { strawberry_fruit_spread } from "./StrawberryFruitSpread";
 
 export const baseFoods = [
     banana,
@@ -378,5 +448,75 @@ export const baseFoods = [
     pepper_jack_cheese,
     peppers,
     persimmons,
-     // 190
+    cherry, // 190
+    cherry_juice,
+    cherry_jam,
+    cherry_tomatoes,
+    Chocolate_Easter_Eggs,
+    cooked_wide_egg_noodles,
+    dry_egg_whites,
+    duck_egg,
+    egg_nog,
+    eggroll_wrappers,
+    eggs, // 200
+    egg_white,
+    green_mangos,
+    hard_cooked_egg,
+    italian_tomatoes,
+    jarred_sour_cherries,
+    liquid_egg_substitute,
+    mangos,
+    mango_sorbet,
+    mangosteen,
+    maraschino_cherry, // 210
+    pistachio_oil,
+    pita_bread,
+    poached_eggs,
+    plum_sauce,
+    plum_preserves,
+    rice_wine_vinegar,
+    rice_protein_powder,
+    rice_for_risotto,
+    rice_drink,
+    rice, // 220
+    riced_cauliflower,
+    reduced_fat_buttermilk,
+    red_plums,
+    rainier_cherries,
+    rabbit_pieces,
+    quinoa,
+    quail_eggs,
+    purple_plums,
+    pure_vanilla_extract,
+    pumpernickel_bread, // 230
+    prune,
+    pretzel_bun,
+    powdered_fruit_pectin,
+    potato_bread,
+    pomegranate_juice,
+    roast_beef,
+    rocket,
+    rye_bread,
+    saffron_threads,
+    sage_leaves, // 240
+    salame,
+    salted_butter,
+    sesame_seed,
+    sesame_seed_burger_buns,
+    sesame_seed_oil,
+    sesame_seed_paste,
+    shaoxing_wine,
+    sherry_wine,
+    skirt_steak,
+    smoked_paprika, // 250
+    smooth_peanut_butter,
+    sodium_bicarbonate,
+    sour_dough_bread,
+    soured_cream,
+    soy_milk,
+    spring_roll_wrapper,
+    sprouted_grain_bread,
+    star_fruit,
+    sticky_rice,
+    strawberry_fruit_spread, // 260
 ]
